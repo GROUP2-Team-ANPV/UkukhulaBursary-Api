@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-/// <summary>
-/// The application db context.
-/// </summary>
 
 public class ApplicationDbContext : IdentityDbContext
 {
@@ -14,7 +11,6 @@ public class ApplicationDbContext : IdentityDbContext
         base.OnModelCreating(modelBuilder);
 
         SeedRoles(modelBuilder);
-        // Add other seed methods if needed
     }
 
     private void SeedRoles(ModelBuilder modelBuilder)

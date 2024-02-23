@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace DataAccess
 {
-    public class StudentFundRequestDAL
+    public class UniversitiesDAL
     {
         private readonly SqlConnection _connection;
 
-        public StudentFundRequestDAL(SqlConnection connection)
+        public UniversitiesDAL(SqlConnection connection)
         {
             _connection = connection;
         }
@@ -179,6 +179,5 @@ namespace DataAccess
                 _connection.Close();
             }
         }
-        
     }
 }

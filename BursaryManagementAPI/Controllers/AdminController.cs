@@ -1,6 +1,6 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Models;
-using DataAccess.Entity;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +17,7 @@ namespace BursaryManagementAPI.Controllers
         [Route("GetAllUniversityRequests")]
         [HttpGet]
         [Authorize(Roles = Roles.BBDAdmin)]
-        public ActionResult<IEnumerable<UniversityRequest>> Get()
+        public ActionResult<IEnumerable<DataAccess.Entity.UniversityRequest>> Get()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace BursaryManagementAPI.Controllers
         [Route("GetUniversityAllocationsByYear")]
         [HttpGet]
         [Authorize(Roles = Roles.BBDAdmin)]
-        public ActionResult<IEnumerable<AllocationDetails>> GetYearAllocations()
+        public ActionResult<IEnumerable<DataAccess.Entity.AllocationDetails>> GetYearAllocations()
         {
             try
             {
@@ -106,6 +106,26 @@ namespace BursaryManagementAPI.Controllers
                 {
                     BadRequest(ex.Message);
                 }
+            }
+        }
+
+        [HttpPost("AddUniversity")]
+        public ActionResult Create([FromBody] AddUniversityAndUser newRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+
+                _adminBLL.AddUniversity(newRequest);
+                return Ok("Student fund request created successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating student fund request: {ex.Message}");
             }
         }
     }

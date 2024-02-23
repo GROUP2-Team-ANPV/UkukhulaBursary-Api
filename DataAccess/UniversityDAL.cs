@@ -9,10 +9,6 @@ public class UniversityDAL(SqlConnection connection)
 {
     SqlConnection _connection = connection;
 
-    /// <summary>
-    /// Switches the connection.
-    /// </summary>
-    /// <param name="mustBeOpen">If true, must be open.</param>
     private void SwitchConnection(bool mustBeOpen)
     {
         switch (_connection.State)
@@ -169,5 +165,7 @@ public class UniversityDAL(SqlConnection connection)
         command.ExecuteNonQuery();
         SwitchConnection (false);
     }
+    
+
 }
 
