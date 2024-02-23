@@ -169,5 +169,38 @@ namespace DataAccess
         {
             new UniversityDAL(_connection).allocate();
         }
+        //Ukukhula Front-end
+        public void AddUniversity(AddUniversityAndUser newRequest)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "EXEC [dbo].[AddUniversityAndUser] @UniversityName, @ProvinceID, @FirstName, @LastName, @Email, @PhoneNumber, @RoleID, @DepartmentID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@UniversityName", newRequest.UniversityName);
+                    command.Parameters.AddWithValue("@ProvinceID", newRequest.ProvinceID);
+                    command.Parameters.AddWithValue("@FirstName", newRequest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", newRequest.LastName);
+                    command.Parameters.AddWithValue("@Email", newRequest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
+                    command.Parameters.AddWithValue("@RoleID", 1);
+                    command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error executing AddUniversityAndUser: {ex.Message}");
+                // Log or handle the exception as needed
+            }
+            finally
+            {
+                _connection.Close(); 
+            }
+        }
     }
 }

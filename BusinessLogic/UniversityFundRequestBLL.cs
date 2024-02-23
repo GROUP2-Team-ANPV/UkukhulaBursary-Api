@@ -1,6 +1,8 @@
 ﻿
 using BusinessLogic.Models;
+using DataAccess;
 using DataAccess.Entity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,25 +19,6 @@ namespace BusinessLogic
         {
             _repository = repository;
         }
-
-
-
-
-
-
-        public void save(UniversityFundRequest request)
-        {
-            //UniversityFundRequest fundRequest = new(
-            //    universityID: _repository.GetUniversityNameByID(request.getID()),
-            //    dateCreated: DateTime.Now()
-            //    ) ;
-
-
-
-        }
-
-
-
 
         public List<University> GetUniversities()
         {
@@ -68,6 +51,8 @@ namespace BusinessLogic
                 throw new Exception("Error allocating funds", ex);
             }
         }
+
+        
 
     }
 }
