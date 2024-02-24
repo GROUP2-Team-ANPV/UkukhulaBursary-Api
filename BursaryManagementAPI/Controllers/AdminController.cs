@@ -109,24 +109,6 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-        [HttpPost("AddUniversity")]
-        public ActionResult Create([FromBody] AddUniversityAndUser newRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-
-                _adminBLL.AddUniversity(newRequest);
-                return Ok("Student fund request created successfully!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating student fund request: {ex.Message}");
-            }
-        }
+        
     }
 }

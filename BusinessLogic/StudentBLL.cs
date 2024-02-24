@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace BusinessLogic
 {
-    public class UploadDocumentBLL
+    public class StudentBLL
     {
-        private readonly UploadDocumentDAL _uploadDocumentDAL;
+        private readonly StudentDAL _uploadDocumentDAL;
 
-        public UploadDocumentBLL(UploadDocumentDAL uploadDocumentDAL)
+        public StudentBLL(StudentDAL uploadDocumentDAL)
         {
             _uploadDocumentDAL = uploadDocumentDAL;
         }

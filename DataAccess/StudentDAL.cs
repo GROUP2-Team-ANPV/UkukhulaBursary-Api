@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    public class UploadDocumentDAL
+    public class StudentDAL
     {
         private readonly SqlConnection _connection;
         private readonly BlobServiceClient _blobServiceClient;
 
-        public UploadDocumentDAL(SqlConnection connection, BlobServiceClient blobServiceClient)
+        public StudentDAL(SqlConnection connection, BlobServiceClient blobServiceClient)
         {
             _connection = connection;
             _blobServiceClient = blobServiceClient;
