@@ -34,14 +34,17 @@ public class Startup
 
         services.AddScoped<UniversityDAL>();
         services.AddScoped<UserDAL>();
-        services.AddScoped<UploadDocumentDAL>();
-        services.AddScoped<StudentFundRequestDAL>();
-        services.AddScoped<StudentFundRequestBLL>();
-        services.AddScoped<UploadDocumentBLL>();
+        services.AddScoped<StudentDAL>();
+        services.AddScoped<UniversityAdminDAL>();
+        services.AddScoped<UniversityAdminBLL>();
+        services.AddScoped<StudentBLL>();
         services.AddScoped<UniversityDAL>();
         services.AddScoped<UniversityFundRequestBLL>();
         services.AddScoped<AdminBLL>();
         services.AddScoped<AdminDAL>();
+        services.AddScoped<BBDAdminBLL>();
+        services.AddScoped<BBDAdminDAL>();
+
 
         // Adding Azure services to the dependency injection container (Scoped to instantiate a new object when requested)
         services.AddScoped(provider =>
@@ -86,7 +89,7 @@ public class Startup
         });
 
         services.AddScoped<UserBLL>();
-        services.AddScoped<UploadDocumentBLL>();
+        services.AddScoped<StudentBLL>();
 
         services.AddControllers();
 

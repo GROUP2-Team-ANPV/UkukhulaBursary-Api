@@ -74,31 +74,6 @@ namespace BusinessLogic
         }
 
         ///
-        public void AddUniversity(Models.AddUniversityAndUser newRequest)
-        {
-            if (newRequest != null)
-                try
-                {
-                    DataAccess.Entity.AddUniversityAndUser dataAccessModel = new()
-                    {
-                        UniversityName = newRequest.UniversityName,
-                        ProvinceID = newRequest.ProvinceID,
-                        FirstName = newRequest.FirstName,
-                        LastName = newRequest.LastName,
-                        Email = newRequest.Email,
-                        PhoneNumber = newRequest.PhoneNumber,
-                        DepartmentID = newRequest.DepartmentID
-
-                    };
-
-                    _repository.AddUniversity(dataAccessModel);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error creating student fund request" + ex.StackTrace);
-                }
-            else
-                throw new ArgumentNullException(nameof(newRequest));
-        }
+        
     }
 }

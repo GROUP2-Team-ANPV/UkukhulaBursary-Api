@@ -5,21 +5,18 @@ using System.Threading.Tasks;
 
 namespace BursaryManagementAPI.Controllers
 {
-    /// <summary>
-    /// The upload document controller.
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class UploadDocumentController : ControllerBase
+    public class StudentController : ControllerBase
     {
-        private readonly UploadDocumentBLL _uploadDocumentBLL;
+        private readonly StudentBLL _uploadDocumentBLL;
 
-        public UploadDocumentController(UploadDocumentBLL uploadDocumentBLL)
+        public StudentController(StudentBLL uploadDocumentBLL)
         {
             _uploadDocumentBLL = uploadDocumentBLL;
         }
 
-        [HttpPost("{requestID}/upload")]
+        [HttpPost("{requestID}/UploadDocument")]
         public async Task<ActionResult> UploadDocument(int requestID, [FromForm] BusinessLogic.Models.UploadDocument uploadDocument)
         {
             try
