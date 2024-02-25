@@ -82,7 +82,7 @@ namespace DataAccess
                 }
                 return request;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Error updating university fund request connection problems");
             }
@@ -121,7 +121,7 @@ namespace DataAccess
                 }
                 return request;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Error creating new university fund request connection problems");
             }
@@ -155,7 +155,7 @@ namespace DataAccess
                 }
                 return allocations;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Error getting university fund allocations connection problems");
             }
