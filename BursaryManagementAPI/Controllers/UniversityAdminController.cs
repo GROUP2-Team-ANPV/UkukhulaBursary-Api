@@ -84,11 +84,11 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _UniversityAdminBLL.Create(newRequest);
-                return Ok("Student fund request created successfully!");
+                return Ok(new { message = "Student fund request created successfully!" });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating student fund request: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error creating student fund request" });
             }
         }
 
@@ -98,6 +98,19 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 var requests = _UniversityAdminBLL.GetAllFundRequests();
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving student fund requests: {ex.Message}");
+            }
+        }
+        [HttpGet("GetFundRequestByID")]
+        public ActionResult<IEnumerable<FundRequest>> GetFundRequestByID(int FundID)
+        {
+            try
+            {
+                var requests = _UniversityAdminBLL.GetFundRequestByID(FundID);
                 return Ok(requests);
             }
             catch (Exception ex)
@@ -126,28 +139,42 @@ namespace BursaryManagementAPI.Controllers
         //}
 
         //[Authorize(Roles = Roles.UniversityAdmin)]
-        //[HttpPut("updateRequest/{id}")]
-        //public ActionResult UpdateRequest(int id, [FromBody] UpdateStudentFundRequest updatedRequest)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPut("UpdateFundRequest/{FundRequestID}")]
+        public ActionResult UpdateFundRequest(int FundRequestID, [FromBody] UpdateFundRequest updatedRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    try
-        //    {
-        //        _StudentFundRequestBLL.UpdateRequest(id, updatedRequest);
-        //        return Ok("Student fund request updated successfully!");
-        //    }
-        //    catch (KeyNotFoundException)
-        //    {
-        //        return NotFound("Student fund request not found!");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating student fund request: {ex.Message}");
-        //    }
-        //}
+            try
+            {
+                _UniversityAdminBLL.UpdateFundRequest(FundRequestID, updatedRequest);
+                return Ok("Student fund request updated successfully!");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Student fund request not found!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating student fund request: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetDocumentByFundRequestID")]
+        public ActionResult<IEnumerable<GetDocument>> GetDocumentByFundRequestID(int FundID)
+        {
+            try
+            {
+                var requests = _UniversityAdminBLL.GetDocumentByFundRequestID(FundID);
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving documents: {ex.Message}");
+            }
+        }
 
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DataAccess
@@ -171,6 +172,60 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+        public FundRequest GetFundRequestByID(int FundID)
+        {
+
+            try
+            {
+                _connection.Open();
+                string query = "EXEC [dbo].[GetFundRequestByID] @FundRequestID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@FundRequestID", FundID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            FundRequest fundRequest = new FundRequest
+                            {
+                                FundRequestID = reader.GetInt32(reader.GetOrdinal("FundRequestID")),
+                                Grade = reader.GetByte(reader.GetOrdinal("Grade")),
+                                Amount = reader.GetDecimal(reader.GetOrdinal("Amount")),
+                                Motivation = reader.GetString(reader.GetOrdinal("Motivation")),
+                                ApplicationDate = reader.GetDateTime(reader.GetOrdinal("ApplicationDate")),
+                                Status = reader.GetString(reader.GetOrdinal("Status")),
+                                Comment = reader.GetString(reader.GetOrdinal("Comment")),
+                                StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                                IDNumber = reader.GetString(reader.GetOrdinal("IDNumber")),
+                                BirthDate = reader.GetDateTime(reader.GetOrdinal("BirthDate")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                                Gender = reader.GetString(reader.GetOrdinal("Gender")),
+                                Race = reader.GetString(reader.GetOrdinal("Race")),
+                                University = reader.GetString(reader.GetOrdinal("University")),
+                                Department = reader.GetString(reader.GetOrdinal("Department")),
+                                DocumentStatus = reader.GetString(reader.GetOrdinal("DocumentStatus"))
+                            };
+
+                            return fundRequest;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                    
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+        }
+
         public IEnumerable<FundRequest> GetAllFundRequests()
         {
             List<FundRequest> fundRequests = new List<FundRequest>();
@@ -219,9 +274,6 @@ namespace DataAccess
             return fundRequests;
         }
 
-
-
-
         //public void CreateForExistingStudent(ExistingStudent newRequest)
         //{
         //    try
@@ -244,33 +296,71 @@ namespace DataAccess
         //    }
         //}
 
-        //public void UpdateRequest(int id, UpdateStudentFundRequest updatedRequest)
-        //{
-        //    try
-        //    {
-        //        _connection.Open();
-        //        string query = "UPDATE StudentFundRequest SET Grade = @Grade, Amount = @Amount WHERE ID = @ID AND StatusID = 3";
-        //        using (SqlCommand command = new SqlCommand(query, _connection))
-        //        {
-        //            command.Parameters.AddWithValue("@Grade", updatedRequest.Grade);
-        //            command.Parameters.AddWithValue("@Amount", updatedRequest.Amount);
-        //            command.Parameters.AddWithValue("@ID", id);
+        public void UpdateFundRequest(int FundRequestID, UpdateFundRequest updatedRequest)
+        {
+            try
+            {
+                _connection.Open();
+                string query = "UPDATE StudentFundRequest SET Grade = @Grade, Amount = @Amount, Motivation = @Motivation,StudentID = @StudentID, DepartmentID = @DepartmentID WHERE ID = @FundRequestID AND StatusID = 3";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@FundRequestID", FundRequestID);
+                    command.Parameters.AddWithValue("@Grade", updatedRequest.Grade);
+                    command.Parameters.AddWithValue("@Amount", updatedRequest.Amount);
+                    command.Parameters.AddWithValue("@Motivation", updatedRequest.Motivation);
+                    command.Parameters.AddWithValue("@StudentID", updatedRequest.StudentID);
+                    command.Parameters.AddWithValue("@DepartmentID", updatedRequest.StudentID);
 
-        //            int rowsAffected = command.ExecuteNonQuery();
-        //            if (rowsAffected == 0)
-        //            {   
-        //                _connection.Close() ;
-        //                throw new KeyNotFoundException("Student fund request not found!");
-        //            }
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        _connection.Close();
-        //    }
-        //}
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected == 0)
+                    {
+                        _connection.Close();
+                        throw new KeyNotFoundException("Student fund request not found!");
+                    }
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
 
+        public GetDocument GetDocumentByFundRequestID(int FundID)
+        {
 
+            try
+            {
+                _connection.Open();
+                string query = "EXEC [dbo].[GetDocumentsByRequestID] @FundRequestID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@FundRequestID", FundID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            GetDocument document = new GetDocument
+                            {
+                                DocumentPath = reader.GetString(reader.GetOrdinal("DocumentPath")),
+                                DocumentType = reader.GetString(reader.GetOrdinal("DocumentType"))
+                            };
+
+                            return document;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+        }
 
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataAccess.Entity
 {
     public class AddUniversityAndUser
     {

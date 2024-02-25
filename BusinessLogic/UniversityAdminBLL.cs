@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using BusinessLogic.Models.Response;
 using Microsoft.AspNetCore.Identity;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace BusinessLogic
 {
@@ -59,7 +60,7 @@ namespace BusinessLogic
             {
                 try
                 {
-                    StudentFundRequest dataAccessModel = new StudentFundRequest
+                    StudentFundRequest dataAccessModel = new()
                     {
                         FirstName = newRequest.FirstName,
                         LastName = newRequest.LastName,
@@ -100,6 +101,18 @@ namespace BusinessLogic
             }
         }
 
+        public FundRequest GetFundRequestByID(int FundID)
+        {
+            try
+            {
+                return _repository.GetFundRequestByID(FundID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving students fund requests: {ex.Message}");
+            }
+        }
+
 
         //public void CreateForExistingStudent(Models.ExistingStudent newRequest)
         //{
@@ -124,28 +137,40 @@ namespace BusinessLogic
         //}
 
 
-        //public void UpdateRequest(int id, Models.UpdateStudentFundRequest newRequest)
-        //{
-        //    if (newRequest == null)
-        //        throw new ArgumentNullException(nameof(newRequest));
+        public void UpdateFundRequest(int FundRequestID, Models.UpdateFundRequest newRequest)
+        {
+            if (newRequest == null)
+                throw new ArgumentNullException(nameof(newRequest));
 
-        //    try
-        //    {
-        //        UpdateStudentFundRequest updatedRequest = new()
-        //        {
-        //            Grade = newRequest.Grade,
-        //            Amount = newRequest.Amount
-        //        };
-        //        _repository.UpdateRequest(id, updatedRequest);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"Error updating student fund request: {ex.Message}");
-        //    }
-        //}
+            try
+            {
+                UpdateFundRequest updatedRequest = new()
+                {
+                    Grade = newRequest.Grade,
+                    Amount = newRequest.Amount,
+                    Motivation =  newRequest.Motivation,
+                    StudentID = newRequest.StudentID,
+                    DepartmentID = newRequest.DepartmentID,
+                };
+                _repository.UpdateFundRequest(FundRequestID, updatedRequest);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating student fund request: {ex.Message}");
+            }
+        }
 
-
-
+        public GetDocument GetDocumentByFundRequestID(int FundID)
+        {
+            try
+            {
+                return _repository.GetDocumentByFundRequestID(FundID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving document: {ex.Message}");
+            }
+        }
 
     }
 }
