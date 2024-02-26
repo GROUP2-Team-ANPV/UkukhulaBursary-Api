@@ -8,18 +8,18 @@ using System;
 using System.Collections.Generic;
 
 namespace BursaryManagementAPI.Controllers
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
     public class BBDAdminController : ControllerBase
     {
         private readonly BBDAdminBLL _BBDAdminBLL;
-        
+
 
         public BBDAdminController(BBDAdminBLL BBDAdminBLL)
-        {            
+        {
             _BBDAdminBLL = BBDAdminBLL;
-            
+
         }
 
         [HttpGet("GetAllUniversities")]
@@ -81,7 +81,7 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _BBDAdminBLL.AddUniversityUser(newRequest);
-                return Ok("User created successfully!");
+                return Ok(new { message = "University user added successfully!", status = "success" });
             }
             catch (Exception ex)
             {
