@@ -46,6 +46,45 @@ namespace DataAccess
             }
         }
 
+
+        public GetAllUniversities GetAllUniversityByID(int UniversityID)
+        {
+            try
+            {
+                _connection.Open();
+                List<GetAllUniversities> requests = new List<GetAllUniversities>();
+                string query = "EXEC [dbo].[GetUniversityByID] @UniversityID";
+                using (SqlCommand command = new SqlCommand(query, _connection)) 
+                {
+                    command.Parameters.AddWithValue("@UniversityID", UniversityID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            GetAllUniversities request = new GetAllUniversities
+                            {
+                                UniversityName = reader.GetString(reader.GetOrdinal("Name")),
+                                ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
+                                ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                            };
+                            return request;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                    
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
         //Ukukhula Front-end
         public void AddUniversity(AddUniversityAndUser newRequest)
         {
