@@ -36,6 +36,20 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
+        [HttpGet("GetAllUniversityByID")]
+        public ActionResult<IEnumerable<GetAllUniversities>> GetAllUniversityByID(int UniversityID)
+        {
+            try
+            {
+                var requests = _BBDAdminBLL.GetAllUniversityByID(UniversityID);
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving universities: {ex.Message}");
+            }
+        }
+
         [HttpPost("AddUniversity")]
         public ActionResult Create([FromBody] AddUniversityAndUser newRequest)
         {

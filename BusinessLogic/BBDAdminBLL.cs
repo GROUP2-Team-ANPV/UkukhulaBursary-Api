@@ -27,6 +27,18 @@ namespace BusinessLogic
             }
         }
 
+        public GetAllUniversities GetAllUniversityByID(int UniversityID)
+        {
+            try
+            {
+                return _repository.GetAllUniversityByID(UniversityID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving student fund requests: {ex.Message}");
+            }
+        }
+
         public void AddUniversity(Models.AddUniversityAndUser newRequest)
         {
             if (newRequest != null)
