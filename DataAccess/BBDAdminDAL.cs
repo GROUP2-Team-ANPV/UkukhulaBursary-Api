@@ -158,5 +158,35 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+
+        public void AddUniversityUser(AddUniversityUser newRequest)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "EXEC [dbo].[AddUniversityUser] @UniversityID, @FirstName, @LastName, @Email, @PhoneNumber, @DepartmentID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@UniversityID", newRequest.UniversityID);
+                    command.Parameters.AddWithValue("@FirstName", newRequest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", newRequest.LastName);
+                    command.Parameters.AddWithValue("@Email", newRequest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
+                    command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error executing AddUniversityUser: {ex.Message}");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
     }
 }
