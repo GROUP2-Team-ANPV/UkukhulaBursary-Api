@@ -90,6 +90,32 @@ namespace BusinessLogic
             }
         }
 
+        public void AddUniversityUser(Models.AddUniversityUser newRequest)
+        {
+            if (newRequest != null)
+                try
+                {
+                    DataAccess.Entity.AddUniversityUser dataAccessModel = new()
+                    {
+                        UniversityID = newRequest.UniversityID,
+                        FirstName = newRequest.FirstName,
+                        LastName = newRequest.LastName,
+                        Email = newRequest.Email,
+                        PhoneNumber = newRequest.PhoneNumber,
+                        DepartmentID = newRequest.DepartmentID
+
+                    };
+
+                    _repository.AddUniversityUser(dataAccessModel);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error creating university user");
+                }
+            else
+                throw new ArgumentNullException(nameof(newRequest));
+        }
+
         //public void Create(Models.CreateStudentFundRequestForNewStudent newRequest)
         //{
         //    if (newRequest != null)

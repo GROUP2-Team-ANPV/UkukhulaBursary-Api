@@ -69,6 +69,25 @@ namespace BursaryManagementAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating student fund request: {ex.Message}");
             }
         }
+        [HttpPost("AddUniversityUser")]
+        public ActionResult AddUniversityUser([FromBody] AddUniversityUser newRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+
+                _BBDAdminBLL.AddUniversityUser(newRequest);
+                return Ok("User created successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating university user: {ex.Message}");
+            }
+        }
 
         //[Authorize(Roles = Roles.BBDAdmin)]
         [HttpPost("{applicationId}/approve")]
