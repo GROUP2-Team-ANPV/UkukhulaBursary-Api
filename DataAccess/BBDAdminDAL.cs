@@ -188,5 +188,75 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+
+        public IEnumerable<GetUsers> GetUniversityUsers()
+        {
+            try
+            {
+                _connection.Open();
+                List<GetUsers> requests = new List<GetUsers>();
+                string query = "EXEC [dbo].[GetUniversityUser]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        GetUsers request = new ()
+                        {
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                            UniversityName = reader.GetString(reader.GetOrdinal("UniversityName")),
+                            DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
+                        };
+                        requests.Add(request);
+                    }
+                }
+                _connection.Close();
+                return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public IEnumerable<GetUsers> GetUserByUniversityID(int UniversityID)
+        {
+            try
+            {
+                _connection.Open();
+                List<GetUsers> requests = new List<GetUsers>();
+                string query = "EXEC [dbo].[GetUserByUniversityID] @UniversityID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@UniversityID", UniversityID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            GetUsers request = new()
+                            {
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                                UniversityName = reader.GetString(reader.GetOrdinal("UniversityName")),
+                                DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
+                            };
+                            requests.Add(request);
+                        }
+                    }
+                    _connection.Close();
+                    return requests;
+                }             
+
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
     }
 }
