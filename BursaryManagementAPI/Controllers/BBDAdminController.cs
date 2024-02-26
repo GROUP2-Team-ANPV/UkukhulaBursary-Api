@@ -36,7 +36,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-        [HttpGet("GetAllUniversityByID")]
+        [HttpGet("GetUniversityByID")]
         public ActionResult<IEnumerable<GetAllUniversities>> GetAllUniversityByID(int UniversityID)
         {
             try
