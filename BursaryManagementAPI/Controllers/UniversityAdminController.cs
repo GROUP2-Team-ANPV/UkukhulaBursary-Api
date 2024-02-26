@@ -1,5 +1,6 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Models;
+using DataAccess.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,18 @@ namespace BursaryManagementAPI.Controllers
             {
                 var students = _UniversityAdminBLL.GetStudentsByUniversityID(universityID);
                 return Ok(students);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving students: {ex.Message}");
+            }
+        }
+        [HttpGet("GetUniversityAndTheirStudents")]
+        public ActionResult<UniversityDTO> GetUniversityAndTheirStudents(int universityID) {
+            try
+            {
+                var university = _UniversityAdminBLL.GetUniversityAndTheirStudents(universityID);
+                return Ok(university);
             }
             catch (Exception ex)
             {

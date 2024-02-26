@@ -6,6 +6,7 @@ using System.Net;
 using BusinessLogic.Models.Response;
 using Microsoft.AspNetCore.Identity;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using DataAccess.DTO;
 
 namespace BusinessLogic
 {
@@ -34,6 +35,17 @@ namespace BusinessLogic
             try
             {
                 return _repository.GetStudentsByUniversityID(universityID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving students: {ex.Message}");
+            }
+        }
+        public UniversityDTO GetUniversityAndTheirStudents(int universityID)
+        {
+            try
+            {
+                return _repository.GetUniversityAndTheirStudents(universityID);
             }
             catch (Exception ex)
             {

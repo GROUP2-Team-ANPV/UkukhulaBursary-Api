@@ -15,6 +15,8 @@ using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using DataAccess.DTO;
+
 
 public class Startup
 {
@@ -44,6 +46,7 @@ public class Startup
         services.AddScoped<AdminDAL>();
         services.AddScoped<BBDAdminBLL>();
         services.AddScoped<BBDAdminDAL>();
+        
 
 
         // Adding Azure services to the dependency injection container (Scoped to instantiate a new object when requested)
