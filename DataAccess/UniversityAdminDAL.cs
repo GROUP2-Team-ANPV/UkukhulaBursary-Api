@@ -129,15 +129,29 @@ namespace DataAccess
                             universityDTO.ID = reader.GetInt32(reader.GetOrdinal("UniversityID"));
                             universityDTO.Name = reader.GetString(reader.GetOrdinal("UniversityName"));
                             universityDTO.Province = reader.GetString(reader.GetOrdinal("ProvinceName"));
-                            universityDTO.HODID = reader.GetInt32(reader.GetOrdinal("ContactID"));
-                            universityDTO.HODFirstName = reader.GetString(reader.GetOrdinal("FirstName"));
-                            universityDTO.HODLastName = reader.GetString(reader.GetOrdinal("LastName"));
+                           
+                        }
+                        if (reader.NextResult())
+                        {
+                            universityDTO.HeadOfDepartment = new List<HeadOfDepartmentDTO>();
+                            while (reader.Read())
+                            {
+                                HeadOfDepartmentDTO headOfDepartment = new HeadOfDepartmentDTO
+                                {
+                                    ID = reader.GetInt32(reader.GetOrdinal("UserID")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber"))
+                                };
+                                universityDTO.HeadOfDepartment.Add(headOfDepartment);
+                            }
                         }
 
                         // Move to the next result set (List of Students)
                         if (reader.NextResult())
                         {
-                            universityDTO.Students = new List<StudentDTO>(); // Initialize the list
+                            universityDTO.Students = new List<StudentDTO>();
 
                             while (reader.Read())
                             {
