@@ -116,6 +116,42 @@ namespace BusinessLogic
                 throw new ArgumentNullException(nameof(newRequest));
         }
 
+        public IEnumerable<GetUsers> GetUniversityUsers()
+        {
+            try
+            {
+                return _repository.GetUniversityUsers();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving user: {ex.Message}");
+            }
+        }
+
+        public IEnumerable<GetUsers> GetUserByUniversityID(int UniversityID)
+        {
+            try
+            {
+                return _repository.GetUserByUniversityID(UniversityID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving student fund requests: {ex.Message}");
+            }
+        }
+
+        public IEnumerable<BBDFund> BBDFund()
+        {
+            try
+            {
+                return _repository.BBDFund();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting university requests: {ex.Message}");
+            }
+        }
+
         //public void Create(Models.CreateStudentFundRequestForNewStudent newRequest)
         //{
         //    if (newRequest != null)

@@ -35,19 +35,19 @@ namespace BursaryManagementAPI.Controllers
             return BadRequest("Some properties are not valid");
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] Register model)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = _userManager.ProcessRegistration(model);
-                if (result.isSuccess)
-                {
-                    return Ok(result);
-                }
-                return BadRequest(result);
-            }
-            return BadRequest("Some properties are not valid");
-        }
+        //[HttpPost("Register")]
+        //public async Task<IActionResult> RegisterAsync([FromBody] Register model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var result = _userManager.ProcessRegistration(model);
+        //        if (result.isSuccess)
+        //        {
+        //            return Ok(result);
+        //        }
+        //        return BadRequest(result);
+        //    }
+        //    return BadRequest("Some properties are not valid");
+        //}
     }
 }
