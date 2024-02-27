@@ -8,6 +8,7 @@ namespace BusinessLogic.Models
 {
     public class GetAllUniversities
     {
+        public int ID { get; set; }
         public string UniversityName { get; set; }
         public string ProvinceName { get; set; }
         public string ContactPerson { get; set; }
