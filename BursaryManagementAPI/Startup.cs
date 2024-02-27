@@ -44,6 +44,8 @@ public class Startup
         services.AddScoped<AdminDAL>();
         services.AddScoped<BBDAdminBLL>();
         services.AddScoped<BBDAdminDAL>();
+        services.AddScoped<ConstantTablesBLL>();
+        services.AddScoped<ConstantTablesDAL>();
 
 
         // Adding Azure services to the dependency injection container (Scoped to instantiate a new object when requested)
