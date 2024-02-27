@@ -23,9 +23,9 @@ namespace BursaryManagementAPI.Controllers
             {
                 return await _uploadDocumentBLL.UploadDocument(requestID, uploadDocument);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while uploading the document.");
+                return StatusCode(500, $"Error uploading document: {ex.Message}");
             }
         }
     }
