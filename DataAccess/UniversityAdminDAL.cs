@@ -272,29 +272,7 @@ namespace DataAccess
             }
 
             return fundRequests;
-        }
-
-        //public void CreateForExistingStudent(ExistingStudent newRequest)
-        //{
-        //    try
-        //    {
-        //        _connection.Open();
-        //        string query = "INSERT INTO [dbo].[StudentFundRequest] ([Grade], [Amount], [Comment], [StudentID], [StatusID])VALUES (@Grade, @Amount, '', @StudentID, 3)";
-        //        using (SqlCommand command = new SqlCommand(query, _connection))
-        //        {
-        //            command.Parameters.AddWithValue("@StudentID", newRequest.StudentID);
-        //            command.Parameters.AddWithValue("@Grade", newRequest.Grade);
-        //            command.Parameters.AddWithValue("@Amount", newRequest.Amount);
-
-        //            command.ExecuteNonQuery();
-        //            _connection.Close();
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        _connection.Close();
-        //    }
-        //}
+        }   
 
         public void UpdateFundRequest(int FundRequestID, UpdateFundRequest updatedRequest)
         {

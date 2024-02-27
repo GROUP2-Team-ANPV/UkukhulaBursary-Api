@@ -85,7 +85,6 @@ namespace DataAccess
             }
         }
 
-        //Ukukhula Front-end
         public void AddUniversity(AddUniversityAndUser newRequest)
         {
             try
@@ -102,7 +101,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue("@LastName", newRequest.LastName);
                     command.Parameters.AddWithValue("@Email", newRequest.Email);
                     command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
-                    command.Parameters.AddWithValue("@RoleID", 2); //2 is the ID for the University Admin role
+                    command.Parameters.AddWithValue("@RoleID", 2); 
                     command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
 
                     command.ExecuteNonQuery();

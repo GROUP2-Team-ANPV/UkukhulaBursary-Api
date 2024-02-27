@@ -114,28 +114,6 @@ namespace BusinessLogic
         }
 
 
-        //public void CreateForExistingStudent(Models.ExistingStudent newRequest)
-        //{
-        //    if (newRequest != null)
-        //        try
-        //        {
-        //            ExistingStudent dataAccessModel = new()
-        //            {
-        //                StudentID = newRequest.StudentID,
-        //                Grade = newRequest.Grade,
-        //                Amount = newRequest.Amount
-        //            };
-
-        //            _repository.CreateForExistingStudent(dataAccessModel);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw new Exception("Error creating student fund request" + ex.StackTrace);
-        //        }
-        //    else
-        //        throw new ArgumentNullException(nameof(newRequest));
-        //}
-
 
         public void UpdateFundRequest(int FundRequestID, Models.UpdateFundRequest newRequest)
         {
