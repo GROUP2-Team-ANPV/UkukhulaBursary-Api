@@ -258,5 +258,34 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+        public IEnumerable<BBDFund> BBDFund()
+        {
+            try
+            {
+                _connection.Open();
+                List<BBDFund> requests = new List<BBDFund>();
+                string query = "SELECT * FROM [dbo].[BBDAllocation]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        BBDFund request = new()
+                        {
+                            Year = reader.GetInt32(reader.GetOrdinal("Year")),
+                            Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
+                            RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
+                        };
+                        requests.Add(request);
+                    }
+                }
+                _connection.Close();
+                return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
     }
 }

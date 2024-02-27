@@ -20,10 +20,7 @@ namespace DataAccess
             return _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<bool> checkUserPassword(IdentityUser user, string password)
-        {
-            return await _userManager.CheckPasswordAsync(user, password);
-        }
+        
 
         public int GetRoleIdByName(string roleName)
         {

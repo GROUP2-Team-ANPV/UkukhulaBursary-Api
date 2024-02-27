@@ -140,6 +140,18 @@ namespace BusinessLogic
             }
         }
 
+        public IEnumerable<BBDFund> BBDFund()
+        {
+            try
+            {
+                return _repository.BBDFund();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting university requests: {ex.Message}");
+            }
+        }
+
         //public void Create(Models.CreateStudentFundRequestForNewStudent newRequest)
         //{
         //    if (newRequest != null)

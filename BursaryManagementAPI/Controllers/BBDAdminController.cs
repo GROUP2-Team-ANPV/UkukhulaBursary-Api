@@ -146,5 +146,20 @@ namespace BursaryManagementAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error rejecting application: {ex.Message}");
             }
         }
+
+
+        [HttpGet("GetAllBBDFunds")]
+        public ActionResult<IEnumerable<BBDFund>> BBDFund()
+        {
+            try
+            {
+                var requests = _BBDAdminBLL.BBDFund();
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving universities: {ex.Message}");
+            }
+        }
     }
 }
