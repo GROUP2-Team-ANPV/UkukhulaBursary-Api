@@ -28,6 +28,7 @@ namespace DataAccess
                     {
                         GetAllUniversities request = new GetAllUniversities
                         {
+                            ID = reader.GetInt32(reader.GetOrdinal("ID")),
                             UniversityName = reader.GetString(reader.GetOrdinal("Name")),
                             ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
                             ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
@@ -63,6 +64,7 @@ namespace DataAccess
                         {
                             GetAllUniversities request = new GetAllUniversities
                             {
+                                ID = reader.GetInt32(reader.GetOrdinal("ID")),
                                 UniversityName = reader.GetString(reader.GetOrdinal("Name")),
                                 ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
                                 ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),

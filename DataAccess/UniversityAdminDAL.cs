@@ -1,4 +1,5 @@
-﻿using DataAccess.Entity;
+﻿using DataAccess.DTO;
+using DataAccess.Entity;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,17 @@ namespace DataAccess
     public class UniversityAdminDAL
     {
         private readonly SqlConnection _connection;
+        
 
+
+        
         public UniversityAdminDAL(SqlConnection connection)
         {
             _connection = connection;
+        }
+
+        public UniversityAdminDAL()
+        {
         }
 
         public IEnumerable<GetAllStudents> GetAllStudents()
@@ -60,7 +68,10 @@ namespace DataAccess
         {
             try
             {
-                _connection.Open();
+               
+                    _connection.Open();
+                    
+                
                 List<GetAllStudents> students = new List<GetAllStudents>();
                 string query = "EXEC [dbo].[GetStudentsByUniversityID] @UniversityID";
                 using (SqlCommand command = new SqlCommand(query, _connection))
@@ -91,9 +102,75 @@ namespace DataAccess
             }
             finally
             {
+                
+                    _connection.Close();
+                    
+                
+                
+            }
+        }
+        public UniversityDTO GetUniversityAndTheirStudents(int universityID)
+        {
+            try
+            {
+                UniversityDTO universityDTO = new UniversityDTO();
+
+                _connection.Open();
+
+                string query = "EXEC [GetUniversityInfoAndStudents] @UniversityID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@UniversityID", universityID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Process the first result set (University Information)
+                        if (reader.Read())
+                        {
+                            universityDTO.ID = reader.GetInt32(reader.GetOrdinal("UniversityID"));
+                            universityDTO.Name = reader.GetString(reader.GetOrdinal("UniversityName"));
+                            universityDTO.Province = reader.GetString(reader.GetOrdinal("ProvinceName"));
+                            universityDTO.HODID = reader.GetInt32(reader.GetOrdinal("ContactID"));
+                            universityDTO.HODFirstName = reader.GetString(reader.GetOrdinal("FirstName"));
+                            universityDTO.HODLastName = reader.GetString(reader.GetOrdinal("LastName"));
+                        }
+
+                        // Move to the next result set (List of Students)
+                        if (reader.NextResult())
+                        {
+                            universityDTO.Students = new List<StudentDTO>(); // Initialize the list
+
+                            while (reader.Read())
+                            {
+                                StudentDTO student = new StudentDTO
+                                {
+                                    StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                    Age = reader.GetByte(reader.GetOrdinal("Age")),
+                                    IDNumber = reader.GetString(reader.GetOrdinal("IDNumber")),
+                                    BirthDate = reader.GetDateTime(reader.GetOrdinal("BirthDate")),
+                                    Gender = reader.GetString(reader.GetOrdinal("Gender")),
+                                    Race = reader.GetString(reader.GetOrdinal("Race")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                                    Amount = (Double) reader.GetDecimal(reader.GetOrdinal("Amount")), 
+                                    ApplicationStatus = reader.GetString(reader.GetOrdinal("ApplicationStatus"))
+                                };
+
+                                universityDTO.Students.Add(student);
+                            }
+                        }
+                    }
+                }
+
+                return universityDTO;
+            }
+            finally
+            {
                 _connection.Close();
             }
         }
+
 
 
         public GetAllStudents GetStudentByID(int studentID)
