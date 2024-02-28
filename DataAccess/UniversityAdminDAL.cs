@@ -133,6 +133,20 @@ namespace DataAccess
                         }
                         if (reader.NextResult())
                         {
+                            universityDTO.FundAllocation = new List<UniversityFundAllocationDTO>();
+                            while (reader.Read())
+                            {
+                                UniversityFundAllocationDTO universityFundAllocationDTO = new UniversityFundAllocationDTO
+                                {
+                                  TotalAmount = reader.GetDecimal(reader.GetOrdinal("Total")),
+                                  Balance = reader.GetDecimal(reader.GetOrdinal("Balance")),
+                                  Year = reader.GetInt32(reader.GetOrdinal("Year"))
+                                };
+                                universityDTO.FundAllocation.Add(universityFundAllocationDTO);
+                            }
+                        }
+                        if (reader.NextResult())
+                        {
                             universityDTO.HeadOfDepartment = new List<HeadOfDepartmentDTO>();
                             while (reader.Read())
                             {
