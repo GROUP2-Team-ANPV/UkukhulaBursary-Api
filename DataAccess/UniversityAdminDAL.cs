@@ -441,10 +441,12 @@ namespace DataAccess
                 {
                     _connection.Open();
                     string query = @"
-                        SELECT U.Name AS UniversityName,
+                       SELECT U.Name AS UniversityName,
                             ISNULL(SUM(UFA.Budget), 0) AS TotalAllocatedAmount
                         FROM dbo.University U
-                        LEFT JOIN dbo.UniversityFundAllocation UFA ON U.ID = UFA.UniversityID
+                        INNER JOIN dbo.UniversityFundAllocation UFA ON U.ID = UFA.UniversityID
+                        INNER JOIN dbo.BBDAllocation B ON UFA.BBDAllocationID = B.ID
+                        WHERE B.[Year] = 2023
                         GROUP BY U.Name;
                     ";
 
