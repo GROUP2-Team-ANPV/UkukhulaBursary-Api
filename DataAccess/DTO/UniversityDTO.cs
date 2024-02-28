@@ -15,6 +15,7 @@ namespace DataAccess.DTO
         public int ID { get; set; }
         public string Name { get; set; }
         public string Province { get; set; }
+        public List<UniversityFundAllocationDTO> FundAllocation { get; set; } = new List<UniversityFundAllocationDTO>();
         public List<HeadOfDepartmentDTO> HeadOfDepartment { get; set; } = new List<HeadOfDepartmentDTO>();
         public List<StudentDTO> Students { get; set; } = new List<StudentDTO>();
     }
