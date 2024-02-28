@@ -87,7 +87,6 @@ namespace DataAccess
             }
         }
 
-        //Ukukhula Front-end
         public void AddUniversity(AddUniversityAndUser newRequest)
         {
             try
@@ -104,7 +103,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue("@LastName", newRequest.LastName);
                     command.Parameters.AddWithValue("@Email", newRequest.Email);
                     command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
-                    command.Parameters.AddWithValue("@RoleID", 2); //2 is the ID for the University Admin role
+                    command.Parameters.AddWithValue("@RoleID", 2); 
                     command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
 
                     command.ExecuteNonQuery();
@@ -184,6 +183,105 @@ namespace DataAccess
             catch (Exception ex)
             {
                 Console.WriteLine($"Error executing AddUniversityUser: {ex.Message}");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public IEnumerable<GetUsers> GetUniversityUsers()
+        {
+            try
+            {
+                _connection.Open();
+                List<GetUsers> requests = new List<GetUsers>();
+                string query = "EXEC [dbo].[GetUniversityUser]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        GetUsers request = new ()
+                        {
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                            UniversityName = reader.GetString(reader.GetOrdinal("UniversityName")),
+                            DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
+                        };
+                        requests.Add(request);
+                    }
+                }
+                _connection.Close();
+                return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public IEnumerable<GetUsers> GetUserByUniversityID(int UniversityID)
+        {
+            try
+            {
+                _connection.Open();
+                List<GetUsers> requests = new List<GetUsers>();
+                string query = "EXEC [dbo].[GetUserByUniversityID] @UniversityID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@UniversityID", UniversityID);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            GetUsers request = new()
+                            {
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                                UniversityName = reader.GetString(reader.GetOrdinal("UniversityName")),
+                                DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
+                            };
+                            requests.Add(request);
+                        }
+                    }
+                    _connection.Close();
+                    return requests;
+                }             
+
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+        public IEnumerable<BBDFund> BBDFund()
+        {
+            try
+            {
+                _connection.Open();
+                List<BBDFund> requests = new List<BBDFund>();
+                string query = "SELECT * FROM [dbo].[BBDAllocation]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        BBDFund request = new()
+                        {
+                            Year = reader.GetInt32(reader.GetOrdinal("Year")),
+                            Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
+                            RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
+                        };
+                        requests.Add(request);
+                    }
+                }
+                _connection.Close();
+                return requests;
             }
             finally
             {

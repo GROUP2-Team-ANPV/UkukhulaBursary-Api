@@ -36,16 +36,6 @@ namespace BusinessLogic
                 };
             }
 
-            bool result = await _userDAL.checkUserPassword(user, model.Password);
-
-            if (result == false)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "Incorrect Password",
-                    isSuccess = false,
-                };
-            }
             
             Claim[] claims = new[]
             {

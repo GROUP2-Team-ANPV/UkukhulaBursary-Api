@@ -89,6 +89,34 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
+        [HttpGet("GetUniversityUsers")]
+        public ActionResult<IEnumerable<GetUsers>> GetUniversityUsers()
+        {
+            try
+            {
+                var requests = _BBDAdminBLL.GetUniversityUsers();
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving users: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetUserByUniversityID")]
+        public ActionResult<IEnumerable<GetUsers>> GetUserByUniversityID(int UniversityID)
+        {
+            try
+            {
+                var requests = _BBDAdminBLL.GetUserByUniversityID(UniversityID);
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving universities: {ex.Message}");
+            }
+        }
+
         //[Authorize(Roles = Roles.BBDAdmin)]
         [HttpPost("{applicationId}/approve")]
         public ActionResult ApproveApplication(int applicationId)
@@ -116,6 +144,21 @@ namespace BursaryManagementAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error rejecting application: {ex.Message}");
+            }
+        }
+
+
+        [HttpGet("GetAllBBDFunds")]
+        public ActionResult<IEnumerable<BBDFund>> BBDFund()
+        {
+            try
+            {
+                var requests = _BBDAdminBLL.BBDFund();
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving universities: {ex.Message}");
             }
         }
     }

@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Net.Http.Headers;
@@ -34,19 +29,15 @@ public class Startup
         // Adding DB connection services to the dependency injection container (Single object used in the application's lifetime)
         services.AddSingleton<SqlConnection>(_ => new SqlConnection(connectionString));
 
-        services.AddScoped<UniversityDAL>();
         services.AddScoped<UserDAL>();
         services.AddScoped<StudentDAL>();
         services.AddScoped<UniversityAdminDAL>();
         services.AddScoped<UniversityAdminBLL>();
         services.AddScoped<StudentBLL>();
-        services.AddScoped<UniversityDAL>();
-        services.AddScoped<UniversityFundRequestBLL>();
-        services.AddScoped<AdminBLL>();
-        services.AddScoped<AdminDAL>();
         services.AddScoped<BBDAdminBLL>();
         services.AddScoped<BBDAdminDAL>();
-        
+        services.AddScoped<ConstantTablesBLL>();
+        services.AddScoped<ConstantTablesDAL>();
 
 
         // Adding Azure services to the dependency injection container (Scoped to instantiate a new object when requested)
