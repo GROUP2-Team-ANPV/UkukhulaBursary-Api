@@ -162,5 +162,16 @@ namespace BusinessLogic
             }
         }
 
+        public List<UniversityAmount> GetUniversityAmounts()
+        {
+            try{
+                
+                return (List<UniversityAmount>)_repository.GetUniversityAmount();
+            }catch(Exception e){
+               throw new Exception($"Error retrieving university amount: {e.Message}");
+            }
+        }
+
+
     }
 }

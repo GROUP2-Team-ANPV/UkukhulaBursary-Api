@@ -445,5 +445,57 @@ namespace DataAccess
 
         }
 
+
+
+            public IEnumerable<UniversityAmount> GetUniversityAmount()
+            {
+                List<UniversityAmount> result = new List<UniversityAmount>();
+
+                try
+                {
+                    _connection.Open();
+                    string query = @"
+                       SELECT U.Name AS UniversityName,
+                            ISNULL(SUM(UFA.Budget), 0) AS TotalAllocatedAmount
+                        FROM dbo.University U
+                        INNER JOIN dbo.UniversityFundAllocation UFA ON U.ID = UFA.UniversityID
+                        INNER JOIN dbo.BBDAllocation B ON UFA.BBDAllocationID = B.ID
+                        WHERE B.[Year] = 2023
+                        GROUP BY U.Name;
+                    ";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            UniversityAmount universityAmount = new UniversityAmount();
+                            universityAmount.UniversityName = reader.GetString(reader.GetOrdinal("UniversityName"));
+                            universityAmount.Amount = reader.GetDecimal(reader.GetOrdinal("TotalAllocatedAmount"));
+
+                            result.Add(universityAmount);
+                        }
+                        return result;
+                    }
+                }
+
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+
+        }
+
     }
 }
+
+        public class UniversityAmount
+        {
+
+        public decimal Amount { get; set; }
+        public string UniversityName { get; set; }
+        }
+    
