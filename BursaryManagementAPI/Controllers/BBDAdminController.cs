@@ -36,7 +36,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-     
+
 
         [HttpPost("AddUniversity")]
         public ActionResult Create([FromBody] AddUniversityAndUser newRequest)
@@ -150,9 +150,18 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-
-
-
-
+        [HttpGet("GetFundedUniversitiesTotal")]
+        public ActionResult<IEnumerable<FundedUniversities>> FundedUniversities(int fundId)
+        {
+            try
+            {
+                var requests = _BBDAdminBLL.GetFundedUniversities(fundId);
+                return Ok(new { TotalFunded = requests });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving funded universities: {ex.Message}");
+            }
+        }
     }
-}  
+}
