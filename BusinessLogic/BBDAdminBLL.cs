@@ -143,8 +143,16 @@ namespace BusinessLogic
             }
         }
 
-        
-            
-        
+        public int GetFundedUniversities(int fundId)
+        {
+            try
+            {
+                return _repository.GetFundedUniversities(fundId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting total funded: {ex.Message}");
+            }
+        }
     }
 }
