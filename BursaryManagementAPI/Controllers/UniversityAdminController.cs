@@ -170,5 +170,21 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
+        [HttpGet("GetUniversityAmount")]
+        public ActionResult<IEnumerable<UniversityAmount>> GetUniversityAmount(){
+            try
+            {
+                var requests = _UniversityAdminBLL.GetUniversityAmounts();
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving documents: {ex.Message}");
+            }
+        }
+
+
+        
+
     }
 }

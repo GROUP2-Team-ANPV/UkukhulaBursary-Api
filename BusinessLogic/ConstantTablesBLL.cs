@@ -39,6 +39,9 @@ namespace BusinessLogic
                 throw new Exception($"Error retrieving Gender");
             }
         }
+
+
+
         public IEnumerable<ConstantTables> Provinces()
         {
             try
@@ -59,6 +62,19 @@ namespace BusinessLogic
             catch (Exception)
             {
                 throw new Exception($"Error retrieving Race");
+            }
+        }
+
+        public  IEnumerable<ConstantTables> GetStatus()
+        {
+            try
+            {
+                return _repository.GetStatus();
+            }
+            catch (Exception ex )
+            {
+                Console.WriteLine($"Error retrieving status: {ex.Message}");
+                throw new Exception($"Error retrieving status",ex);
             }
         }
     }

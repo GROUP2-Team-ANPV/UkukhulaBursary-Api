@@ -138,9 +138,34 @@ namespace DataAccess
             }
         }
 
-        
+        public IEnumerable<ConstantTables> GetStatus()
+        {
+            try
+            {
+                _connection.Open();
+                List<ConstantTables> requests = new List<ConstantTables>();
+                string query = "SELECT * FROM [dbo].[Status]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ConstantTables request = new()
+                        {
+                            ID = reader.GetInt32(reader.GetOrdinal("ID")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
 
-
-
+                        };
+                        requests.Add(request);
+                    }
+                }
+                _connection.Close();
+                return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
     }
 }
