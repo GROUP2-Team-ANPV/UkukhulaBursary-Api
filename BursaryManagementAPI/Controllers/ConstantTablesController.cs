@@ -79,5 +79,20 @@ namespace BursaryManagementAPI.Controllers
         }
 
 
+        [HttpGet("GetStatus")]
+        public ActionResult<IEnumerable<ConstantTables>> GetStatus()
+        {
+            try
+            {
+                var requests = _ConstantTablesBLL.GetStatus();
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+
     }
 }

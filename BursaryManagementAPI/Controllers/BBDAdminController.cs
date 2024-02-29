@@ -161,5 +161,10 @@ namespace BursaryManagementAPI.Controllers
                 return StatusCode(500, $"Error retrieving universities: {ex.Message}");
             }
         }
+
+
+
+
+
     }
-}
+}  

@@ -1,4 +1,5 @@
-﻿using DataAccess.Entity;
+﻿using Azure.Core;
+using DataAccess.Entity;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -289,4 +290,6 @@ namespace DataAccess
             }
         }
     }
+
+
 }
