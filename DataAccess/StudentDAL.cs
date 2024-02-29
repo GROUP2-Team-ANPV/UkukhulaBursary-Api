@@ -1,6 +1,6 @@
 ﻿using Azure.Core;
 using Azure.Storage.Blobs;
-using DataAccess.Entity;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System;

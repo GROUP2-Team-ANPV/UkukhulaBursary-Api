@@ -5,12 +5,12 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using BusinessLogic;
 using Azure.Storage.Blobs;
-using BusinessLogic.Models;
+using DataAccess.Models;
 using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.DTO;
+
 
 
 public class Startup

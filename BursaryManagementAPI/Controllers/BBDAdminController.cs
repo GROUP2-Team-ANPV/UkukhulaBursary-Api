@@ -1,5 +1,5 @@
 ﻿using BusinessLogic;
-using BusinessLogic.Models;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,19 +36,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-        [HttpGet("GetUniversityByID")]
-        public ActionResult<IEnumerable<GetAllUniversities>> GetAllUniversityByID(int UniversityID)
-        {
-            try
-            {
-                var requests = _BBDAdminBLL.GetAllUniversityByID(UniversityID);
-                return Ok(requests);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error retrieving universities: {ex.Message}");
-            }
-        }
+     
 
         [HttpPost("AddUniversity")]
         public ActionResult Create([FromBody] AddUniversityAndUser newRequest)

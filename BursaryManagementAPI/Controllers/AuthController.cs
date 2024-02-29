@@ -1,6 +1,6 @@
 ﻿using BusinessLogic;
-using BusinessLogic.Models;
-using BusinessLogic.Models.Response;
+using DataAccess.Models;
+using DataAccess.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BursaryManagementAPI.Controllers

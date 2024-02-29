@@ -1,5 +1,5 @@
-﻿using DataAccess.Entity;
-using DataAccess;
+﻿using DataAccess;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -27,25 +27,16 @@ namespace BusinessLogic
             }
         }
 
-        public GetAllUniversities GetAllUniversityByID(int UniversityID)
-        {
-            try
-            {
-                return _repository.GetAllUniversityByID(UniversityID);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving student fund requests: {ex.Message}");
-            }
-        }
+      
 
-        public void AddUniversity(Models.AddUniversityAndUser newRequest)
+        public void AddUniversity(AddUniversityAndUser newRequest)
         {
             if (newRequest != null)
                 try
                 {
-                    DataAccess.Entity.AddUniversityAndUser dataAccessModel = new()
+                    AddUniversityAndUser dataAccessModel = new()
                     {
+                        
                         UniversityName = newRequest.UniversityName,
                         ProvinceID = newRequest.ProvinceID,
                         FirstName = newRequest.FirstName,
@@ -90,12 +81,12 @@ namespace BusinessLogic
             }
         }
 
-        public void AddUniversityUser(Models.AddUniversityUser newRequest)
+        public void AddUniversityUser(AddUniversityUser newRequest)
         {
             if (newRequest != null)
                 try
                 {
-                    DataAccess.Entity.AddUniversityUser dataAccessModel = new()
+                    AddUniversityUser dataAccessModel = new()
                     {
                         UniversityID = newRequest.UniversityID,
                         FirstName = newRequest.FirstName,

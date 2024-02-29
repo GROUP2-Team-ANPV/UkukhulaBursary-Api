@@ -1,5 +1,5 @@
 ﻿using DataAccess.DTO;
-using DataAccess.Entity;
+using DataAccess.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;

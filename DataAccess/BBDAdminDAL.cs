@@ -1,4 +1,4 @@
-﻿using DataAccess.Entity;
+﻿using DataAccess.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -48,44 +48,7 @@ namespace DataAccess
         }
 
 
-        public GetAllUniversities GetAllUniversityByID(int UniversityID)
-        {
-            try
-            {
-                _connection.Open();
-                List<GetAllUniversities> requests = new List<GetAllUniversities>();
-                string query = "EXEC [dbo].[GetUniversityByID] @UniversityID";
-                using (SqlCommand command = new SqlCommand(query, _connection)) 
-                {
-                    command.Parameters.AddWithValue("@UniversityID", UniversityID);
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            GetAllUniversities request = new GetAllUniversities
-                            {
-                                ID = reader.GetInt32(reader.GetOrdinal("ID")),
-                                UniversityName = reader.GetString(reader.GetOrdinal("Name")),
-                                ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
-                                ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
-                                Email = reader.GetString(reader.GetOrdinal("Email")),
-                                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
-                            };
-                            return request;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                }
-                    
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
+        
 
         public void AddUniversity(AddUniversityAndUser newRequest)
         {

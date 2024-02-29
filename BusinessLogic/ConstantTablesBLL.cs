@@ -1,9 +1,9 @@
-﻿using DataAccess.Entity;
+﻿using DataAccess.Models;
 using DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using BusinessLogic.Models.Response;
+using DataAccess.Models.Response;
 using Microsoft.AspNetCore.Identity;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
