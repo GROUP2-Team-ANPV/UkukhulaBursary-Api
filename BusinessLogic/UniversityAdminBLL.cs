@@ -48,7 +48,7 @@ namespace BusinessLogic
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving students: {ex.Message}");
+                throw new Exception($"Error retrieving university: {ex.Message}");
             }
         }
 
