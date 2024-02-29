@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using DataAccess.Entity;
+using DataAccess.Models;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 
@@ -17,7 +17,7 @@ namespace BusinessLogic
             _uploadDocumentDAL = uploadDocumentDAL;
         }
 
-        public async Task<ActionResult> UploadDocument(int requestID, Models.UploadDocument uploadDocument)
+        public async Task<ActionResult> UploadDocument(int requestID, UploadDocument uploadDocument)
         {
             try
             {

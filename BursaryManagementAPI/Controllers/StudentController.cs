@@ -2,6 +2,7 @@
 using BusinessLogic;
 using System;
 using System.Threading.Tasks;
+using DataAccess.Models;
 
 namespace BursaryManagementAPI.Controllers
 {
@@ -17,7 +18,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpPost("{requestID}/UploadDocument")]
-        public async Task<ActionResult> UploadDocument(int requestID, [FromForm] BusinessLogic.Models.UploadDocument uploadDocument)
+        public async Task<ActionResult> UploadDocument(int requestID, [FromForm] UploadDocument uploadDocument)
         {
             try
             {

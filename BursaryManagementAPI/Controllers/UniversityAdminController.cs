@@ -1,5 +1,5 @@
 ﻿using BusinessLogic;
-using BusinessLogic.Models;
+using DataAccess.Models;
 using DataAccess.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -86,7 +86,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPost("StudentFundRequest")]
-        public ActionResult Create([FromBody] BusinessLogic.Models.StudentFundRequest newRequest)
+        public ActionResult Create([FromBody] StudentFundRequest newRequest)
         {
             if (!ModelState.IsValid)
             {

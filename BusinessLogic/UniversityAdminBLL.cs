@@ -1,9 +1,8 @@
-﻿using DataAccess.Entity;
+﻿using DataAccess.Models;
 using DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using BusinessLogic.Models.Response;
 using Microsoft.AspNetCore.Identity;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using DataAccess.DTO;
@@ -49,7 +48,7 @@ namespace BusinessLogic
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving students: {ex.Message}");
+                throw new Exception($"Error retrieving university: {ex.Message}");
             }
         }
 
@@ -66,7 +65,7 @@ namespace BusinessLogic
         }
 
 
-        public void Create(Models.StudentFundRequest newRequest)
+        public void Create(StudentFundRequest newRequest)
         {
             if (newRequest != null)
             {
@@ -127,7 +126,7 @@ namespace BusinessLogic
 
 
 
-        public void UpdateFundRequest(int FundRequestID, Models.UpdateFundRequest newRequest)
+        public void UpdateFundRequest(int FundRequestID, UpdateFundRequest newRequest)
         {
             if (newRequest == null)
                 throw new ArgumentNullException(nameof(newRequest));

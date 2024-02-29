@@ -1,5 +1,5 @@
 ﻿using DataAccess.DTO;
-using DataAccess.Entity;
+using DataAccess.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -128,7 +128,23 @@ namespace DataAccess
                             universityDTO.Name = reader.GetString(reader.GetOrdinal("UniversityName"));
                             universityDTO.Province = reader.GetString(reader.GetOrdinal("ProvinceName"));
                            
+
                         }
+                        if (reader.NextResult())
+                        {
+                            universityDTO.FundAllocation = new List<UniversityFundAllocationDTO>();
+                            while (reader.Read())
+                            {
+                                UniversityFundAllocationDTO fundAllocationDTO = new UniversityFundAllocationDTO
+                                {
+                                    TotalAmount = reader.GetDecimal(reader.GetOrdinal("Total")),
+                                    Balance = reader.GetDecimal(reader.GetOrdinal("Balance")),
+                                    Year = reader.GetInt32(reader.GetOrdinal("Year"))
+                                };
+                                universityDTO.FundAllocation.Add(fundAllocationDTO);
+                            }
+                        }
+
                         if (reader.NextResult())
                         {
                             universityDTO.HeadOfDepartment = new List<HeadOfDepartmentDTO>();

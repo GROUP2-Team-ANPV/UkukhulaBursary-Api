@@ -1,4 +1,4 @@
-﻿using DataAccess.Entity;
+﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;

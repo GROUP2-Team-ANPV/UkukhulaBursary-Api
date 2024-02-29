@@ -1,8 +1,8 @@
 ﻿
-using BusinessLogic.Models;
-using BusinessLogic.Models.Response;
+
 using DataAccess;
-using DataAccess.Entity;
+using DataAccess.Models;
+using DataAccess.Models.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
