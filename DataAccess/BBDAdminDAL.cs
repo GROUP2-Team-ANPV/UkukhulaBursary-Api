@@ -48,7 +48,7 @@ namespace DataAccess
         }
 
 
-        
+
 
         public void AddUniversity(AddUniversityAndUser newRequest)
         {
@@ -66,7 +66,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue("@LastName", newRequest.LastName);
                     command.Parameters.AddWithValue("@Email", newRequest.Email);
                     command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
-                    command.Parameters.AddWithValue("@RoleID", 2); 
+                    command.Parameters.AddWithValue("@RoleID", 2);
                     command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
 
                     command.ExecuteNonQuery();
@@ -165,7 +165,7 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        GetUsers request = new ()
+                        GetUsers request = new()
                         {
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
@@ -214,7 +214,7 @@ namespace DataAccess
                     }
                     _connection.Close();
                     return requests;
-                }             
+                }
 
             }
             finally
@@ -223,6 +223,7 @@ namespace DataAccess
             }
         }
         public IEnumerable<BBDFund> BBDFund()
+
         {
             try
             {
@@ -246,6 +247,24 @@ namespace DataAccess
                 }
                 _connection.Close();
                 return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public int GetFundedUniversities(int fundId)
+        {
+            try
+            {
+                _connection.Open();
+                string query = "SELECT [dbo].[getFundedUniversitiesByFundID](@FundID) as TotalFunded";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@FundID", fundId);
+                    return (int)command.ExecuteScalar();
+                }
             }
             finally
             {
