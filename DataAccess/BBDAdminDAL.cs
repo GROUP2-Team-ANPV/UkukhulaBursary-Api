@@ -236,6 +236,7 @@ namespace DataAccess
                     {
                         BBDFund request = new()
                         {
+                            ID = reader.GetInt32(reader.GetOrdinal("ID")),
                             Year = reader.GetInt32(reader.GetOrdinal("Year")),
                             Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
                             RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
