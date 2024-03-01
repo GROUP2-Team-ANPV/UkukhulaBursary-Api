@@ -40,8 +40,7 @@ namespace BusinessLogic
             Claim[] claims = new[]
             {
                 new Claim("Email", model.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Role, "BBD Admin")
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
                 
             };
             var roles = await _userDAL.getUserRoles(user);

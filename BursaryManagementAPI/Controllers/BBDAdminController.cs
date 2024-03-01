@@ -23,7 +23,6 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllUniversities")]
-        [Authorize(Roles = "BBD Admin")]
         public ActionResult<IEnumerable<GetAllUniversities>> GetAllRequests()
         {
             try
