@@ -254,23 +254,5 @@ namespace DataAccess
                 _connection.Close();
             }
         }
-
-        public int GetFundedUniversities(int fundId)
-        {
-            try
-            {
-                _connection.Open();
-                string query = "SELECT [dbo].[getFundedUniversitiesByFundID](@FundID) as TotalFunded";
-                using (SqlCommand command = new SqlCommand(query, _connection))
-                {
-                    command.Parameters.AddWithValue("@FundID", fundId);
-                    return (int)command.ExecuteScalar();
-                }
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
     }
 }
