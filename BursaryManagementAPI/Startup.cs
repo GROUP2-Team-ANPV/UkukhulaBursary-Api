@@ -82,6 +82,12 @@ public class Startup
                 policy.RequireRole(Roles.BBDAdmin));
         });
 
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireUniversityRole", policy =>
+                policy.RequireRole(Roles.UniversityAdmin));
+        });
+
         services.AddScoped<UserBLL>();
         services.AddScoped<StudentBLL>();
 
