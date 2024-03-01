@@ -229,7 +229,7 @@ namespace DataAccess
             {
                 _connection.Open();
                 List<BBDFund> requests = new List<BBDFund>();
-                string query = "SELECT * FROM [dbo].[BBDAllocation]";
+                string query = "SELECT ID, Budget, RemainingBudget, FundedUniversities, Year FROM [dbo].[uspGetBBDFundsDetails]";
                 using (SqlCommand command = new SqlCommand(query, _connection))
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -241,6 +241,7 @@ namespace DataAccess
                             Year = reader.GetInt32(reader.GetOrdinal("Year")),
                             Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
                             RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
+                            FundedUniversities = reader.GetInt32(reader.GetOrdinal("FundedUniversities"))
                         };
                         requests.Add(request);
                     }
