@@ -20,11 +20,11 @@ namespace BursaryManagementAPI.Controllers
         /// <param name="model">The Login model.</param>
         /// <returns>A Task.</returns>
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync([FromBody] Login model)
+        public async Task<IActionResult> LoginAsync(string email)
         {
             if (ModelState.IsValid)
             {
-                UserManagerResponse result = await _userManager.LoginUserAsync(model);
+                UserManagerResponse result = await _userManager.LoginUserAsync(email);
                 if (result.isSuccess)
                 {
                     return Ok(result);

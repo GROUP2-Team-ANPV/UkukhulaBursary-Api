@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.DTO;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,6 @@ namespace DataAccess
     {
         private readonly SqlConnection _connection = connection;
         
-        //Returns null if no user exists
        
 
         public int GetRoleIdByName(string roleName)
@@ -38,10 +38,10 @@ namespace DataAccess
             }
         }
 
-        public User getUserByEmail(string email)
+        public LoginDetailsDTO getUserByEmail(string email)
         {
             _connection.Open();
-            User user = new User();
+            
 
             string query = "EXEC GetUserDetailsByEmail @Email";
             using (SqlCommand command = new SqlCommand(query, _connection))
@@ -50,25 +50,37 @@ namespace DataAccess
                 {
                     command.Parameters.AddWithValue("@Email", email);
                     SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    if (reader.Read())
                     {
-                        user = new User
+                        LoginDetailsDTO  user = new LoginDetailsDTO
                         {
-                            ID = reader.GetInt32(0),
-                            FirstName = reader.GetString(1),
-                            LastName = reader.GetString(2),
-                            ContactID = reader.GetInt32(3),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Email= reader.GetString(reader.GetOrdinal("Email")),
+                            RoleType =reader.GetString(reader.GetOrdinal("RoleType"))
+
                         };
+                        return user;
                     }
+                    else
+                    {
+                        return null;
+                    }
+
                 }
                 catch (Exception e)
                 {
-                    _connection.Close();
+                  
                     throw e;
                 }
+                finally
+                {
+                    _connection.Close();
+                }
+
             }
-            _connection.Close();
-            return user;
+            
+            
         }
 
      
