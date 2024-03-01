@@ -12,7 +12,7 @@ namespace DataAccess.Models
         public int FundedUniversities {get;set;}
         public int Year { get; set; }
         public decimal Budget { get; set; }
-        public decimal RemainingBudget { get; set; }
+        public decimal AmountUsed { get; set; }
     }
 
 }
