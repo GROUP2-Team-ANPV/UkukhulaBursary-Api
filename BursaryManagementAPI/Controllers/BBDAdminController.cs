@@ -149,19 +149,5 @@ namespace BursaryManagementAPI.Controllers
                 return StatusCode(500, $"Error retrieving universities: {ex.Message}");
             }
         }
-
-        [HttpGet("GetFundedUniversitiesTotal")]
-        public ActionResult<IEnumerable<FundedUniversities>> FundedUniversities(int fundId)
-        {
-            try
-            {
-                var requests = _BBDAdminBLL.GetFundedUniversities(fundId);
-                return Ok(new { TotalFunded = requests });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error retrieving funded universities: {ex.Message}");
-            }
-        }
     }
 }
