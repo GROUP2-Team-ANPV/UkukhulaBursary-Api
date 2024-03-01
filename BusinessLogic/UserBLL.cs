@@ -26,8 +26,8 @@ namespace BusinessLogic
 
         public async Task<UserManagerResponse> LoginUserAsync(Login model)
         {
-           // var user = await _userDAL.checkUserByEmail(model.Email);
-            if ("user" == null)
+            var user = await _userDAL.checkUserByEmail(model.Email);
+            if (user == null)
             {
                 return new UserManagerResponse
                 {
@@ -40,20 +40,20 @@ namespace BusinessLogic
             Claim[] claims = new[]
             {
                 new Claim("Email", model.Email),
-                //new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Role, "BBD Admin")
                 
             };
-            //var roles = await _userDAL.getUserRoles(user);
-           // var claimsWithRoles = roles.Select(role => new Claim(ClaimTypes.Role, role));
-            //var allClaims = claims.Concat(claimsWithRoles);
+            var roles = await _userDAL.getUserRoles(user);
+            var claimsWithRoles = roles.Select(role => new Claim(ClaimTypes.Role, role));
+            var allClaims = claims.Concat(claimsWithRoles);
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:Key"]));
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["AuthSettings:Issuer"],
                 audience: _configuration["AuthSettings:Audience"],
-          //      claims: allClaims,
+                claims: allClaims,
                 expires: DateTime.Now.AddDays(30),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
@@ -67,7 +67,69 @@ namespace BusinessLogic
             };
         }
 
-      
+        public UserManagerResponse ProcessRegistration(Register model)
+        {
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if(model.Password != model.ConfirmPassword)
+            {
+                return new UserManagerResponse
+                {
+                    Message = "Passwords do not match",
+                    isSuccess = false
+                };
+            }
+
+            var applicationUser = new IdentityUser
+            {
+                Email = model.Email,
+                UserName = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                
+            };
+
+             IdentityResult result = _userDAL.RegisterIdentityUser(applicationUser, model.Password, model.Role).Result;
+
+            if (result.Succeeded)
+            {
+                ContactDetails contacts = new ContactDetails
+                {
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                };
+                int contactId = _userDAL.InsertContactsAndGetPrimaryKey(contacts);
+
+                User user = new User
+                {
+                    ContactID = contactId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                };
+                int userId = _userDAL.InsertUserAndGetPrimaryKey(user);
+                
+                _userDAL.InsertToUserRole(userId, model.Role);
+
+
+
+
+
+                return new UserManagerResponse
+                {
+                    Message = $"User created, Username: {model.Email}",
+                    isSuccess = true
+                };
+            }
+
+
+            return new UserManagerResponse
+            {
+                Message = "User not created",
+                isSuccess = false
+            };
+        }
 
         public async Task<User> getUser(string email)
         {

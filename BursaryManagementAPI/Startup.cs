@@ -7,6 +7,7 @@ using BusinessLogic;
 using Azure.Storage.Blobs;
 using DataAccess.Models;
 using DataAccess;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,9 +48,16 @@ public class Startup
             return blobServiceClient;
         });
 
-       
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-        
+        services.AddIdentity<IdentityUser, IdentityRole>(options =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 8;
+            options.User.RequireUniqueEmail = true;
+        }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
         services.AddAuthentication(auth =>
         {
