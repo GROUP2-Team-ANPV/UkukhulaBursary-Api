@@ -40,7 +40,7 @@ namespace DataAccess
             _connection.Open();
             User user = new User();
 
-            string query = "SELECT usr.ID, FirstName, LastName,ContactDetails.ID, PhoneNumber, Email FROM [dbo].[User] as usr INNER JOIN ContactDetails ON ContactDetails.Email=@Email AND ContactDetails.ID = usr.ContactID";
+            string query = "EXEC GetUserDetailsByEmail @Email";
             using (SqlCommand command = new SqlCommand(query, _connection))
             {
                 try

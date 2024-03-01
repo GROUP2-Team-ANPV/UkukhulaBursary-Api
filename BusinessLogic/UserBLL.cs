@@ -4,7 +4,7 @@ using DataAccess;
 using DataAccess.Models;
 using DataAccess.Models.Response;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
