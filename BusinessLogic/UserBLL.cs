@@ -1,10 +1,9 @@
 ﻿
 
 using DataAccess;
+using DataAccess.DTO;
 using DataAccess.Models;
 using DataAccess.Models.Response;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -24,9 +23,9 @@ namespace BusinessLogic
             _configuration = configuration;
         }
 
-        public async Task<UserManagerResponse> LoginUserAsync(Login model)
+        public async Task<UserManagerResponse> LoginUserAsync(string email)
         {
-            var user = await _userDAL.checkUserByEmail(model.Email);
+            LoginDetailsDTO user = _userDAL.getUserByEmail(email);
             if (user == null)
             {
                 return new UserManagerResponse
@@ -37,23 +36,24 @@ namespace BusinessLogic
             }
 
             
-            Claim[] claims = new[]
+             List<Claim> claims = new List<Claim>
             {
-                new Claim("Email", model.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+               new Claim(ClaimTypes.Name, user.FirstName ),
+               new Claim (ClaimTypes.Surname, user.LastName),
+               new Claim (ClaimTypes.Email, user.Email),
+               new Claim(ClaimTypes.Role , user.RoleType)
+
                 
             };
-            var roles = await _userDAL.getUserRoles(user);
-            var claimsWithRoles = roles.Select(role => new Claim(ClaimTypes.Role, role));
-            var allClaims = claims.Concat(claimsWithRoles);
+          
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:Key"]));
 
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["AuthSettings:Issuer"],
                 audience: _configuration["AuthSettings:Audience"],
-                claims: allClaims,
-                expires: DateTime.Now.AddDays(30),
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
@@ -66,71 +66,8 @@ namespace BusinessLogic
             };
         }
 
-        public UserManagerResponse ProcessRegistration(Register model)
-        {
-            if(model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            if(model.Password != model.ConfirmPassword)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "Passwords do not match",
-                    isSuccess = false
-                };
-            }
-
-            var applicationUser = new IdentityUser
-            {
-                Email = model.Email,
-                UserName = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                
-            };
-
-             IdentityResult result = _userDAL.RegisterIdentityUser(applicationUser, model.Password, model.Role).Result;
-
-            if (result.Succeeded)
-            {
-                ContactDetails contacts = new ContactDetails
-                {
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                };
-                int contactId = _userDAL.InsertContactsAndGetPrimaryKey(contacts);
-
-                User user = new User
-                {
-                    ContactID = contactId,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                };
-                int userId = _userDAL.InsertUserAndGetPrimaryKey(user);
-                
-                _userDAL.InsertToUserRole(userId, model.Role);
-
-
-
-
-
-                return new UserManagerResponse
-                {
-                    Message = $"User created, Username: {model.Email}",
-                    isSuccess = true
-                };
-            }
-
-
-            return new UserManagerResponse
-            {
-                Message = "User not created",
-                isSuccess = false
-            };
-        }
-
-        public async Task<User> getUser(string email)
+        
+        public async Task<LoginDetailsDTO> getUser(string email)
         {
             return _userDAL.getUserByEmail(email);
 

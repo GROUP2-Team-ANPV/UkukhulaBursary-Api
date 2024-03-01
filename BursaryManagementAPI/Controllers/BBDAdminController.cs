@@ -23,6 +23,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllUniversities")]
+        [Authorize(Roles = Roles.Student)]
         public ActionResult<IEnumerable<GetAllUniversities>> GetAllRequests()
         {
             try
@@ -105,7 +106,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = Roles.BBDAdmin)]
+       
         [HttpPost("{applicationId}/approve")]
         public ActionResult ApproveApplication(int applicationId)
         {

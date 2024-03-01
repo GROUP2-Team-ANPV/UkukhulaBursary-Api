@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.DTO;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +11,11 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace DataAccess
 {
 
-    public class UserDAL(SqlConnection connection, UserManager<IdentityUser> userManager)
+    public class UserDAL(SqlConnection connection)
     {
         private readonly SqlConnection _connection = connection;
-        private readonly UserManager<IdentityUser> _userManager = userManager;
-        //Returns null if no user exists
-        public Task<IdentityUser?> checkUserByEmail(string email)
-        {
-            return _userManager.FindByEmailAsync(email);
-        }
-
         
+       
 
         public int GetRoleIdByName(string roleName)
         {
@@ -43,48 +38,52 @@ namespace DataAccess
             }
         }
 
-        public User getUserByEmail(string email)
+        public LoginDetailsDTO getUserByEmail(string email)
         {
             _connection.Open();
-            User user = new User();
+            
 
-            string query = "SELECT usr.ID, FirstName, LastName,ContactDetails.ID, PhoneNumber, Email FROM [dbo].[User] as usr INNER JOIN ContactDetails ON ContactDetails.Email=@Email AND ContactDetails.ID = usr.ContactID";
+            string query = "EXEC GetUserDetailsByEmail @Email";
             using (SqlCommand command = new SqlCommand(query, _connection))
             {
                 try
                 {
                     command.Parameters.AddWithValue("@Email", email);
                     SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    if (reader.Read())
                     {
-                        user = new User
+                        LoginDetailsDTO  user = new LoginDetailsDTO
                         {
-                            ID = reader.GetInt32(0),
-                            FirstName = reader.GetString(1),
-                            LastName = reader.GetString(2),
-                            ContactID = reader.GetInt32(3),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Email= reader.GetString(reader.GetOrdinal("Email")),
+                            RoleType =reader.GetString(reader.GetOrdinal("RoleType"))
+
                         };
+                        return user;
                     }
+                    else
+                    {
+                        return null;
+                    }
+
                 }
                 catch (Exception e)
                 {
-                    _connection.Close();
+                  
                     throw e;
                 }
+                finally
+                {
+                    _connection.Close();
+                }
+
             }
-            _connection.Close();
-            return user;
+            
+            
         }
 
-        public Task<IList<System.Security.Claims.Claim>> getUserClaims(IdentityUser user)
-        {
-            return _userManager.GetClaimsAsync(user);
-        }
-
-        public Task<IList<string>> getUserRoles(IdentityUser user)
-        {
-            return _userManager.GetRolesAsync(user);
-        }
+     
 
         public int InsertContactsAndGetPrimaryKey(ContactDetails contactDetails)
         {
@@ -166,11 +165,5 @@ namespace DataAccess
             }
         }
 
-        public async Task<IdentityResult> RegisterIdentityUser(IdentityUser applicationUser, string password, string role)
-        {
-            var result = await _userManager.CreateAsync(applicationUser, password);
-            await _userManager.AddToRoleAsync(applicationUser, role);
-            return result;
-        }
     }
 }
