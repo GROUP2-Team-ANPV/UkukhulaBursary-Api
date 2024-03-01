@@ -10,17 +10,12 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace DataAccess
 {
 
-    public class UserDAL(SqlConnection connection, UserManager<IdentityUser> userManager)
+    public class UserDAL(SqlConnection connection)
     {
         private readonly SqlConnection _connection = connection;
-        private readonly UserManager<IdentityUser> _userManager = userManager;
-        //Returns null if no user exists
-        public Task<IdentityUser?> checkUserByEmail(string email)
-        {
-            return _userManager.FindByEmailAsync(email);
-        }
-
         
+        //Returns null if no user exists
+       
 
         public int GetRoleIdByName(string roleName)
         {
@@ -76,15 +71,7 @@ namespace DataAccess
             return user;
         }
 
-        public Task<IList<System.Security.Claims.Claim>> getUserClaims(IdentityUser user)
-        {
-            return _userManager.GetClaimsAsync(user);
-        }
-
-        public Task<IList<string>> getUserRoles(IdentityUser user)
-        {
-            return _userManager.GetRolesAsync(user);
-        }
+     
 
         public int InsertContactsAndGetPrimaryKey(ContactDetails contactDetails)
         {
@@ -166,11 +153,5 @@ namespace DataAccess
             }
         }
 
-        public async Task<IdentityResult> RegisterIdentityUser(IdentityUser applicationUser, string password, string role)
-        {
-            var result = await _userManager.CreateAsync(applicationUser, password);
-            await _userManager.AddToRoleAsync(applicationUser, role);
-            return result;
-        }
     }
 }
