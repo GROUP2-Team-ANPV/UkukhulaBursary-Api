@@ -150,5 +150,25 @@ namespace BursaryManagementAPI.Controllers
                 return StatusCode(500, $"Error retrieving universities: {ex.Message}");
             }
         }
+
+         [HttpPut("{applicationId}/UpdateStatus")]
+        public ActionResult UpdateStatus(int applicationId, [FromBody] DataAccess.Models.UpdateStatus updateStatus)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _BBDAdminBLL.UpdateStatus(applicationId, updateStatus.status,updateStatus.comment);
+                return Ok("Status updated successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating status: {ex.Message}");
+            }
+        }
+
     }
 }

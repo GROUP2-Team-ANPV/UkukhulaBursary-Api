@@ -254,5 +254,30 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+
+
+        public void UpdateApplicationStatus(int applicationId, string status ,string comment)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "UPDATE StudentFundRequest SET StatusID = @Status, Comment = @Comment WHERE ID = @ID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@Comment", comment);
+                    command.Parameters.AddWithValue("@ID", applicationId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
     }
 }
