@@ -148,7 +148,7 @@ namespace BusinessLogic
                     Amount = newRequest.Amount,
                     Motivation =  newRequest.Motivation,
                     StudentID = newRequest.StudentID,
-                    DepartmentID = newRequest.DepartmentID,
+                    
                     
                 };
                 _repository.UpdateFundRequest(FundRequestID, updatedRequest);

@@ -9,8 +9,8 @@ namespace DataAccess.Models
     public class UpdateFundRequest
     {
 
-        public String FirstName {get;set;}
-        public String LastName{get;set;}
+        public string FirstName {get;set;}
+        public string LastName {get;set;}
 
         public int Age{get;set;}
 
@@ -24,7 +24,7 @@ namespace DataAccess.Models
         public decimal Amount { get; set; }
         public string Motivation { get; set; }
         public int StudentID { get; set; }
-        public int DepartmentID { get; set; }
+        public string DepartmentID { get; set; }
         public string ApplicationStatus { get; set; }
 
     }
