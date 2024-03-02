@@ -142,5 +142,18 @@ namespace BusinessLogic
                 throw new Exception($"Error getting university requests: {ex.Message}");
             }
         }
+
+        public void UpdateStatus(int applicationId, string status, string comment)
+        {
+            try
+            {
+
+                _repository.UpdateApplicationStatus(applicationId, status,comment);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating application status: {ex.Message}");
+            }
+        }
     }
 }
