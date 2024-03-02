@@ -155,5 +155,44 @@ namespace BusinessLogic
                 throw new Exception($"Error updating application status: {ex.Message}");
             }
         }
+
+        public void AllocateFunds()
+        {
+            try
+            {
+
+                _repository.AllocateFunds();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error allocating funds: {ex.Message}");
+            }
+        }
+
+        public void AllocateUniversityFunds(AllocateFunds newRequest)
+        {
+
+
+            if (newRequest != null)
+                try
+                {
+                    AllocateFunds dataAccessModel = new()
+                    {
+                        UniversityID = newRequest.UniversityID,
+                        AllocatedAmount = newRequest.AllocatedAmount,
+
+
+                    };
+
+                    _repository.AllocateUniversityFunds(dataAccessModel);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error loading funds");
+                }
+            else
+                throw new ArgumentNullException(nameof(newRequest));
+            
+        }
     }
 }

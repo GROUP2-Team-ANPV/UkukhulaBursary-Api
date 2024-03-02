@@ -279,5 +279,92 @@ namespace DataAccess
             }
         }
 
+        
+
+        public void AllocateFunds()
+        {
+            try
+            {
+                _connection.Open();
+
+                
+                string countQuery = "SELECT COUNT(*) FROM dbo.University";
+                int totalUniversities;
+                using (SqlCommand countCommand = new SqlCommand(countQuery, _connection))
+                {
+                    totalUniversities = (int)countCommand.ExecuteScalar();
+                }
+
+                
+                string budgetQuery = "SELECT Budget FROM dbo.BBDAllocation WHERE Year= 2024";
+                decimal budget;
+                using (SqlCommand budgetCommand = new SqlCommand(budgetQuery, _connection))
+                {
+                    budget = (decimal)budgetCommand.ExecuteScalar();
+                }
+
+                
+                decimal equalAmount = budget / totalUniversities;
+
+                
+                string insertOrUpdateQuery = @"
+                                            UPDATE UFA
+                                            SET Budget = @EqualAmount,
+                                                RemainingBudget = @EqualAmount
+                                            FROM dbo.UniversityFundAllocation UFA
+                                            INNER JOIN dbo.University U ON UFA.UniversityID = U.ID;";
+                
+                using (SqlCommand command = new SqlCommand(insertOrUpdateQuery, _connection))
+                {
+                    command.Parameters.AddWithValue("@EqualAmount", equalAmount);
+                    command.ExecuteNonQuery();
+
+   
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error allocating funds: {ex.Message}");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        
+        public void AllocateUniversityFunds(AllocateFunds dataAccessModel)
+{
+    try
+    {
+        _connection.Open();
+
+        string query = @"
+                        IF EXISTS (SELECT 1 FROM UniversityFundAllocation WHERE UniversityID = @UniversityId)
+                        BEGIN
+                            UPDATE UniversityFundAllocation
+                            SET Budget = @AllocatedAmount
+                            WHERE UniversityID = @UniversityId;
+                        END
+                        ELSE
+                        BEGIN
+                            INSERT INTO UniversityFundAllocation (UniversityID, Budget)
+                            VALUES (@UniversityId, @AllocatedAmount);
+                        END;
+                    ";
+
+        using (SqlCommand command = new SqlCommand(query, _connection))
+        {
+            command.Parameters.AddWithValue("@UniversityId", dataAccessModel.UniversityID);
+            command.Parameters.AddWithValue("@AllocatedAmount", dataAccessModel.AllocatedAmount);
+            command.ExecuteNonQuery();
+        }
+    }
+    finally
+    {
+        _connection.Close();
+    }
+}
+
     }
 }
