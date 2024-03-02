@@ -240,7 +240,7 @@ namespace DataAccess
                             ID = reader.GetInt32(reader.GetOrdinal("ID")),
                             Year = reader.GetInt32(reader.GetOrdinal("Year")),
                             Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
-                            RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
+                            // RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
                             FundedUniversities = reader.GetInt32(reader.GetOrdinal("FundedUniversities"))
                         };
                         requests.Add(request);
@@ -254,5 +254,31 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+
+
+
+        public void UpdateApplicationStatus(int applicationId, string status ,string comment)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "UPDATE StudentFundRequest SET StatusID = @Status, Comment = @Comment WHERE ID = @ID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@Comment", comment);
+                    command.Parameters.AddWithValue("@ID", applicationId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
     }
 }
