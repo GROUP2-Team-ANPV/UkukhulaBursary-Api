@@ -156,7 +156,8 @@ namespace DataAccess
                                     FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                                     LastName = reader.GetString(reader.GetOrdinal("LastName")),
                                     Email = reader.GetString(reader.GetOrdinal("Email")),
-                                    PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber"))
+                                    PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                                    DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName"))
                                 };
                                 universityDTO.HeadOfDepartment.Add(headOfDepartment);
                             }
