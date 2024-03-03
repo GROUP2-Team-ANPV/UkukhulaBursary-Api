@@ -57,7 +57,9 @@ namespace DataAccess
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             Email= reader.GetString(reader.GetOrdinal("Email")),
-                            RoleType =reader.GetString(reader.GetOrdinal("RoleType"))
+                            RoleType =reader.GetString(reader.GetOrdinal("RoleType")),
+                            UniverisityID = reader.IsDBNull(reader.GetOrdinal("UniversityID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("UniversityID"))
+
 
                         };
                         return user;
