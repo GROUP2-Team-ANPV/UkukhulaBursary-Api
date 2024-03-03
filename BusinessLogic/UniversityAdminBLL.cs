@@ -181,6 +181,18 @@ namespace BusinessLogic
             }
         }
 
-       
+        public bool DeleteFundRequest(int fundRequestID)
+        {
+                try
+                {
+                    
+                    return _repository.DeleteFundRequest(fundRequestID);
+                }
+                catch (Exception ex)
+                {
+                    
+                    throw new Exception($"Error deleting student fund request: {ex.Message}");
+                }
+        }
     }
 }

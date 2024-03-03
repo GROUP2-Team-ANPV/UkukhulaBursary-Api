@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -11,11 +12,22 @@ namespace DataAccess.Models
     {
 
         int ID { get; set; }
-        string UniversityName { get; set; }
-        decimal Amount { get; set; }
-        string Status { get; set; }
-        string Province { get; set; }
-        string Comment { get; set; }
+        [Required(ErrorMessage = "University name is required.")]
+        public string UniversityName { get; set; }
+
+        [Required(ErrorMessage = "Amount is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Amount must be a non-negative value.")]
+        public decimal Amount { get; set; }
+
+        [Required(ErrorMessage = "Status is required.")]
+        public string Status { get; set; }
+
+        [Required(ErrorMessage = "Province is required.")]
+        public string Province { get; set; }
+
+        public string Comment { get; set; }
+
+        [DataType(DataType.DateTime)]
         DateTime DateCreated { get; set; }
 
         public UniversityFundRequestExisting(int id, string universityName, decimal amount, string status, string province, string comment, DateTime dateCreated)

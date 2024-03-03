@@ -8,7 +8,7 @@ namespace DataAccess.Models
 {
     public class GetStatus
     {
-        public string StatusNmae { get; set; }
+        public string StatusName { get; set; }
         
     }
 }

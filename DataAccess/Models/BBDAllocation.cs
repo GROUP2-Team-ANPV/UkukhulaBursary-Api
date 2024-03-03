@@ -1,5 +1,5 @@
 ﻿
-
+using System.ComponentModel.DataAnnotations;
 namespace DataAccess.Models
 {
     public class BBDAllocation
@@ -7,8 +7,13 @@ namespace DataAccess.Models
 
 
         int ID { get; set; }
-        decimal Budget { get; set; }
-        DateTime DateCreated { get; set; }
+        [Required(ErrorMessage = "Budget is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Budget must be a non-negative value.")]
+        public decimal Budget { get; set; }
+
+        [Required(ErrorMessage = "Date created is required.")]
+        [DataType(DataType.DateTime)]
+        public DateTime DateCreated { get; set; }
         public BBDAllocation(int _id, decimal _budget, DateTime _dateCreated)
         {
             ID = _id;

@@ -7,7 +7,8 @@ namespace DataAccess.Models
         [Required]
         public byte Grade { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Amount is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Amount must be a non-negative value.")]
         public decimal Amount { get; set; }
     }
 }
