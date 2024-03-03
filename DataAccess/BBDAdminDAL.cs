@@ -351,50 +351,41 @@ namespace DataAccess
             {
                 _connection.Open();
 
-                decimal bbdAllocationBudget = 200000000;
+                string query = @"
+                IF EXISTS (SELECT 1 FROM UniversityFundAllocation WHERE UniversityID = @UniversityId)
+                BEGIN
+                UPDATE UniversityFundAllocation
+                SET Budget = @AllocatedAmount
+                WHERE UniversityID = @UniversityId;
+                END
+                ELSE
+                BEGIN
+                INSERT INTO UniversityFundAllocation (UniversityID, Budget)
+                VALUES (@UniversityId, @AllocatedAmount);
+                END;
+                ";
 
-                
-                if (bbdAllocationBudget < dataAccessModel.AllocatedAmount)
+                using (SqlCommand command = new SqlCommand(query, _connection))
                 {
-                    throw new Exception("BBDAllocation budget is insufficient for the allocated amount.");
-                }else{
-
-                        string query = @"
-                                        IF EXISTS (SELECT 1 FROM UniversityFundAllocation WHERE UniversityID = @UniversityId)
-                                        BEGIN
-                                            UPDATE UniversityFundAllocation
-                                            SET Budget = @AllocatedAmount
-                                            WHERE UniversityID = @UniversityId;
-                                        END
-                                        ELSE
-                                        BEGIN
-                                            INSERT INTO UniversityFundAllocation (UniversityID, Budget)
-                                            VALUES (@UniversityId, @AllocatedAmount);
-                                        END;
-                                    ";
-
-                        using (SqlCommand command = new SqlCommand(query, _connection))
-                        {
-                            command.Parameters.AddWithValue("@UniversityId", dataAccessModel.UniversityID);
-                            command.Parameters.AddWithValue("@AllocatedAmount", dataAccessModel.AllocatedAmount);
-                            command.ExecuteNonQuery();
-                        }
+                    command.Parameters.AddWithValue("@UniversityId", dataAccessModel.UniversityID);
+                    command.Parameters.AddWithValue("@AllocatedAmount", dataAccessModel.AllocatedAmount);
+                    command.ExecuteNonQuery();
+                }
 
                     
 
-                    }
-            }
-                    finally
-                    {
-                        _connection.Close();
-                    }
+                    
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+
+
             
             }
 
-        public decimal GetRemainingAmount(int bBDAllocationID)
-        {
-            throw new NotImplementedException();
-        }
+
 
 
         public decimal GetBBDRemainingAmount(int bbdAllocationID)
