@@ -173,6 +173,7 @@ namespace DataAccess
                                 StudentDTO student = new StudentDTO
                                 {
                                     StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                                    RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
                                     FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                                     LastName = reader.GetString(reader.GetOrdinal("LastName")),
                                     Age = reader.GetByte(reader.GetOrdinal("Age")),
