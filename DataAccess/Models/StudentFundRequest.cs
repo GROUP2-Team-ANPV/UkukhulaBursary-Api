@@ -4,6 +4,8 @@ namespace DataAccess.Models
 {
     public class StudentFundRequest
     {
+
+       
         [Required(ErrorMessage = "First name is required.")]
         public string FirstName { get; set; }
 
