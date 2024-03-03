@@ -27,11 +27,13 @@ namespace DataAccess
                     {
                         while (reader.Read())
                         {
-                            GetAllUniversities request = new GetAllUniversities
-                            {
-                                ID = reader.GetInt32(reader.GetOrdinal("ID")),
-                                UniversityName = reader.GetString(reader.GetOrdinal("Name")),
-                                ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
+                        GetAllUniversities request = new GetAllUniversities
+                        {
+                            ID = reader.GetInt32(reader.GetOrdinal("ID")),
+                            UniversityName = reader.GetString(reader.GetOrdinal("Name")),
+                            ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
+                            HODS = reader.GetInt32(reader.GetOrdinal("HODS")),
+                            Students = reader.GetInt32(reader.GetOrdinal("HODS")),
                                 ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
                                 Email = reader.GetString(reader.GetOrdinal("Email")),
                                 PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
