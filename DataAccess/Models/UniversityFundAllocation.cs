@@ -10,6 +10,7 @@ namespace DataAccess.Models
         public decimal Budget { get; set; }
 
         [Required(ErrorMessage = "Date allocated is required.")]
+        [DataType(DataType.DateTime)]
         public DateTime DateAllocated { get; set; }
 
         [Required(ErrorMessage = "University ID is required.")]

@@ -8,6 +8,7 @@ namespace DataAccess.Models
         int UniversityID { get; set; }
 
         [Required(ErrorMessage = "Date created is required.")]
+        [DataType(DataType.DateTime)]
         DateTime DateCreated { get; set; }
 
         decimal Amount { get; set; }

@@ -11,7 +11,7 @@ namespace DataAccess.Models
     {
 
 
-        // public DateTime BirthDate { get; set; }
+        
         [Required(ErrorMessage = "First name is required.")]
         public string FirstName { get; set; }
 
@@ -27,6 +27,7 @@ namespace DataAccess.Models
         public string IDNumber { get; set; }
 
         [Required(ErrorMessage = "Birth date is required.")]
+        [DataType(DataType.DateTime)]
         public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "Gender is required.")]
@@ -44,6 +45,7 @@ namespace DataAccess.Models
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Grade is required.")]
+        [Range(1, 100, ErrorMessage = "Grade must be between 1 and 100 (representing a percentage).")]
         public int Grade { get; set; }
 
         [Required(ErrorMessage = "Amount is required.")]

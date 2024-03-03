@@ -27,6 +27,7 @@ namespace DataAccess.Models
 
         public string Comment { get; set; }
 
+        [DataType(DataType.DateTime)]
         DateTime DateCreated { get; set; }
 
         public UniversityFundRequestExisting(int id, string universityName, decimal amount, string status, string province, string comment, DateTime dateCreated)

@@ -12,7 +12,7 @@ namespace DataAccess.Models
         public int FundRequestID { get; set; }
 
         [Required(ErrorMessage = "Grade is required.")]
-        [Range(1, 12, ErrorMessage = "Grade must be between 1 and 12.")]
+        [Range(1, 100, ErrorMessage = "Grade must be between 1 and 100 (representing a percentage).")]
         public byte Grade { get; set; }
 
         [Required(ErrorMessage = "Amount is required.")]
@@ -23,7 +23,7 @@ namespace DataAccess.Models
         public string Status { get; set; }
         public string Comment { get; set; }
         public int StudentID { get; set; }
-            [Required(ErrorMessage = "ID number is required.")]
+        [Required(ErrorMessage = "ID number is required.")]
         [StringLength(13, MinimumLength = 13, ErrorMessage = "ID number must be 13 digits long.")]
         public string IDNumber { get; set; }
         public DateTime BirthDate { get; set; }
