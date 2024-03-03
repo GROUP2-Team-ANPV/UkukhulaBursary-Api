@@ -135,11 +135,21 @@ namespace BusinessLogic
             {
                 UpdateFundRequest updatedRequest = new()
                 {
+                    FirstName = newRequest.FirstName,
+                    LastName = newRequest.LastName,
+                    Age = newRequest.Age,
+                    IDNumber =newRequest.IDNumber,
+                    BirthDate= newRequest.BirthDate,
+                    Gender = newRequest.Gender,
+                    Race = newRequest.Race,
+                    Email = newRequest.Email,
+                    PhoneNumber = newRequest.PhoneNumber,
                     Grade = newRequest.Grade,
                     Amount = newRequest.Amount,
                     Motivation =  newRequest.Motivation,
                     StudentID = newRequest.StudentID,
-                    DepartmentID = newRequest.DepartmentID,
+                    
+                    
                 };
                 _repository.UpdateFundRequest(FundRequestID, updatedRequest);
             }

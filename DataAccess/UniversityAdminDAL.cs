@@ -183,7 +183,13 @@ namespace DataAccess
                                     Email = reader.GetString(reader.GetOrdinal("Email")),
                                     PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
                                     Amount = (Double) reader.GetDecimal(reader.GetOrdinal("Amount")), 
-                                    ApplicationStatus = reader.GetString(reader.GetOrdinal("ApplicationStatus"))
+                                    ApplicationStatus = reader.GetString(reader.GetOrdinal("ApplicationStatus")),
+                                    Grade = reader.GetByte(reader.GetOrdinal("Grade")), 
+                                    Motivation = reader.GetString(reader.GetOrdinal("Motivation")), 
+                                    Comment = reader.GetString(reader.GetOrdinal("Comment")),  
+                                    ApplicationDate = reader.GetDateTime(reader.GetOrdinal("ApplicationDate"))
+                                    
+                                  
                                 };
 
                                 universityDTO.Students.Add(student);
@@ -378,22 +384,63 @@ namespace DataAccess
             }
 
             return fundRequests;
-        }   
+        }  
+
 
         public void UpdateFundRequest(int FundRequestID, UpdateFundRequest updatedRequest)
         {
             try
             {
                 _connection.Open();
-                string query = "UPDATE StudentFundRequest SET Grade = @Grade, Amount = @Amount, Motivation = @Motivation,StudentID = @StudentID, DepartmentID = @DepartmentID WHERE ID = @FundRequestID AND StatusID = 3";
+
+                string query = @"
+                    UPDATE dbo.StudentFundRequest
+                    SET 
+                        Grade = @Grade,
+                        Amount = @Amount,
+                        Motivation = @Motivation
+                    WHERE
+                        ID = @FundRequestID;
+
+                    UPDATE dbo.Student
+                    SET 
+                        IDNumber = @IDNumber,
+                        BirthDate = @BirthDate,
+                        RaceID = @Race,
+                        GenderID = @Gender
+                    WHERE
+                        ID = (SELECT StudentID FROM dbo.StudentFundRequest WHERE ID = @FundRequestID);
+
+                    UPDATE dbo.[User]
+                    SET 
+                        FirstName = @FirstName,
+                        LastName = @LastName
+                    WHERE
+                        ID = (SELECT UserID FROM dbo.Student WHERE ID = (SELECT StudentID FROM dbo.StudentFundRequest WHERE ID = @FundRequestID));
+
+                    UPDATE dbo.ContactDetails
+                    SET 
+                        Email = @Email,
+                        PhoneNumber = @PhoneNumber
+                    WHERE
+                        ID = (SELECT ContactID FROM dbo.[User] WHERE ID = (SELECT UserID FROM dbo.Student WHERE ID = (SELECT StudentID FROM dbo.StudentFundRequest WHERE ID = @FundRequestID)));
+                ";
+
                 using (SqlCommand command = new SqlCommand(query, _connection))
                 {
+                    command.Parameters.AddWithValue("@FirstName", updatedRequest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", updatedRequest.LastName);
+                    command.Parameters.AddWithValue("@Age", updatedRequest.Age);
+                    command.Parameters.AddWithValue("@IDNumber", updatedRequest.IDNumber);
+                    command.Parameters.AddWithValue("@BirthDate", updatedRequest.BirthDate);
+                    command.Parameters.AddWithValue("@Gender", updatedRequest.Gender);
+                    command.Parameters.AddWithValue("@Race", updatedRequest.Race);
+                    command.Parameters.AddWithValue("@Email", updatedRequest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", updatedRequest.PhoneNumber);
                     command.Parameters.AddWithValue("@FundRequestID", FundRequestID);
                     command.Parameters.AddWithValue("@Grade", updatedRequest.Grade);
                     command.Parameters.AddWithValue("@Amount", updatedRequest.Amount);
                     command.Parameters.AddWithValue("@Motivation", updatedRequest.Motivation);
-                    command.Parameters.AddWithValue("@StudentID", updatedRequest.StudentID);
-                    command.Parameters.AddWithValue("@DepartmentID", updatedRequest.StudentID);
 
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected == 0)
@@ -408,6 +455,8 @@ namespace DataAccess
                 _connection.Close();
             }
         }
+
+
 
         public GetDocument GetDocumentByFundRequestID(int FundID)
         {
