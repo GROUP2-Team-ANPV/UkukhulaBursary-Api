@@ -33,7 +33,7 @@ namespace DataAccess
                             UniversityName = reader.GetString(reader.GetOrdinal("Name")),
                             ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
                             HODS = reader.GetInt32(reader.GetOrdinal("HODS")),
-                            Students = reader.GetInt32(reader.GetOrdinal("HODS")),
+                            Students = reader.GetInt32(reader.GetOrdinal("Students")),
                             ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
                             Email = reader.GetString(reader.GetOrdinal("Email")),
                             PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
