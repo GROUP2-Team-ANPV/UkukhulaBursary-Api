@@ -15,6 +15,8 @@ namespace DataAccess.Models
 
         [Required(ErrorMessage = "Province name is required.")]
         public string ProvinceName { get; set; }
+        public int Students {  get; set; }
+        public int HODS { get; set; }
 
         [Required(ErrorMessage = "Contact person is required.")]
         public string ContactPerson { get; set; }
