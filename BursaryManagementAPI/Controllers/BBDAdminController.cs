@@ -170,5 +170,63 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
+
+        [HttpPut("AllocateFunds")]
+        public ActionResult AllocateFunds()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _BBDAdminBLL.AllocateFunds();
+                return Ok("Funds allocated successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating status: {ex.Message}");
+            }
+        }
+
+
+        // [HttpPost("AllocateUniversityFund")]
+        // public ActionResult AllocateUniversityFund()
+        // {
+        //     try
+        //     {
+        //         _BBDAdminBLL.AllocateUniversityFunds();
+        //         return Ok("Funds loaded successfully!");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(StatusCodes.Status500InternalServerError, $"Error rejecting application: {ex.Message}");
+        //     }
+        // }
+
+
+
+        [HttpPost("AllocateUniversityFund")]
+        public ActionResult AllocateUniversityFund([FromBody] AllocateFunds newRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+
+                _BBDAdminBLL.AllocateUniversityFunds(newRequest);
+                return Ok(new { message = "funds loaded successfully!", status = "success" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error loading: {ex.Message}");
+            }
+        }
+
+
     }
 }
