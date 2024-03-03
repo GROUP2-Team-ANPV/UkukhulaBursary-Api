@@ -171,7 +171,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
 
-        [HttpPut("AllocateFunds")]
+        [HttpPut("UpdateUniversityFunds")]
         public ActionResult AllocateFunds()
         {
             if (!ModelState.IsValid)
