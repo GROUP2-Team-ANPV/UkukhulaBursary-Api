@@ -539,6 +539,25 @@ namespace DataAccess
 
         }
 
+        public bool DeleteFundRequest(int fundRequestID)
+        {
+            try
+            {
+                _connection.Open();
+                string query = "DELETE FROM dbo.StudentFundRequest WHERE ID = @FundRequestID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@FundRequestID", fundRequestID);
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0; 
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
     }
 }
 

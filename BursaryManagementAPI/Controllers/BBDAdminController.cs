@@ -191,21 +191,6 @@ namespace BursaryManagementAPI.Controllers
         }
 
 
-        // [HttpPost("AllocateUniversityFund")]
-        // public ActionResult AllocateUniversityFund()
-        // {
-        //     try
-        //     {
-        //         _BBDAdminBLL.AllocateUniversityFunds();
-        //         return Ok("Funds loaded successfully!");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return StatusCode(StatusCodes.Status500InternalServerError, $"Error rejecting application: {ex.Message}");
-        //     }
-        // }
-
-
 
         [HttpPost("AllocateUniversityFund")]
         public ActionResult AllocateUniversityFund([FromBody] AllocateFunds newRequest)
