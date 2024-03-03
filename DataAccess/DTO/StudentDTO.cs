@@ -6,7 +6,8 @@ namespace DataAccess.DTO
 public class StudentDTO
 {
     public int StudentID { get; set; }
- [Required(ErrorMessage = "First name is required.")]
+        public int RequestID { get; set; }
+        [Required(ErrorMessage = "First name is required.")]
         [StringLength(120, ErrorMessage = "First name cannot exceed 120 characters.")]
         public string FirstName { get; set; }
 
