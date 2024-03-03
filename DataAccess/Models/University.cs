@@ -1,11 +1,15 @@
 ﻿using System.Dynamic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
     public class University
     {
-        public int ID { get; set; }
+        public int ID { get; set; }        
+        [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Province ID is required.")]
         public int ProvinceID { get; set; }
 
         public University(string name, int provinceID)
