@@ -184,6 +184,30 @@ namespace BursaryManagementAPI.Controllers
         }
 
 
+        [HttpDelete("DeleteFundRequest/{FundRequestID}")]
+        public ActionResult DeleteFundRequest(int FundRequestID)
+        {
+            try
+            {
+                var deleted = _UniversityAdminBLL.DeleteFundRequest(FundRequestID);
+                
+                if (deleted)
+                {
+                    return Ok("Student fund request deleted successfully!");
+                }
+                else
+                {
+                    return NotFound("Student fund request not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error deleting student fund request: {ex.Message}");
+            }
+        }
+
+
+
         
 
     }

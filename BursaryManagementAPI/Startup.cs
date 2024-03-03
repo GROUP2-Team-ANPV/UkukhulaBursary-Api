@@ -26,7 +26,6 @@ public class Startup
     {
         var connectionString = Configuration.GetConnectionString("DatabaseConnection");
 
-        // Adding DB connection services to the dependency injection container (Single object used in the application's lifetime)
         services.AddSingleton<SqlConnection>(_ => new SqlConnection(connectionString));
 
         services.AddScoped<UserDAL>();
@@ -99,7 +98,7 @@ public class Startup
             });
         });
 
-        // Add CORS services
+       
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAnyOrigin",

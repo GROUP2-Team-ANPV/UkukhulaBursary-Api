@@ -27,11 +27,13 @@ namespace DataAccess
                     {
                         while (reader.Read())
                         {
-                            GetAllUniversities request = new GetAllUniversities
-                            {
-                                ID = reader.GetInt32(reader.GetOrdinal("ID")),
-                                UniversityName = reader.GetString(reader.GetOrdinal("Name")),
-                                ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
+                        GetAllUniversities request = new GetAllUniversities
+                        {
+                            ID = reader.GetInt32(reader.GetOrdinal("ID")),
+                            UniversityName = reader.GetString(reader.GetOrdinal("Name")),
+                            ProvinceName = reader.GetString(reader.GetOrdinal("ProvinceName")),
+                            HODS = reader.GetInt32(reader.GetOrdinal("HODS")),
+                            Students = reader.GetInt32(reader.GetOrdinal("HODS")),
                                 ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
                                 Email = reader.GetString(reader.GetOrdinal("Email")),
                                 PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
@@ -390,6 +392,32 @@ namespace DataAccess
                     }
             
             }
+
+        public decimal GetRemainingAmount(int bBDAllocationID)
+        {
+            throw new NotImplementedException();
         }
+
+
+        public decimal GetBBDRemainingAmount(int bbdAllocationID)
+        {
+            try
+            {
+                _connection.Open();
+                string query = "SELECT Budget - AmountUsed AS RemainingAmount FROM dbo.BBDAllocation WHERE Year = 2024;";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@BBDAllocationID", bbdAllocationID);
+                    object result = command.ExecuteScalar();
+                    return result != null ? Convert.ToDecimal(result) : 0;
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+    }
 
 }
