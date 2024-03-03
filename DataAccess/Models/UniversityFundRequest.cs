@@ -1,13 +1,18 @@
-﻿namespace DataAccess.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataAccess.Models
 {
     public class UniversityFundRequest
     {
         int ID { get; set; }
         int UniversityID { get; set; }
+
+        [Required(ErrorMessage = "Date created is required.")]
         DateTime DateCreated { get; set; }
 
         decimal Amount { get; set; }
-        string StatusID { get; set; }
+        [Required(ErrorMessage = "Status ID is required.")]
+        public string StatusID { get; set; }
         string Comment { get; set; }
 
 
