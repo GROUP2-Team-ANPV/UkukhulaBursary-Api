@@ -52,7 +52,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpGet("GetUniversityAndTheirStudents")]
-        [Authorize(Roles = Roles.BBDAdmin)]
+        [Authorize(Roles = Roles.UniversityAdmin)]
         public ActionResult<UniversityDTO> GetUniversityAndTheirStudents(int universityID)
         {
             try
@@ -181,7 +181,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUniversityAmount")]
-        [Authorize(Roles = Roles.BBDAdmin)]
+        [Authorize(Roles = Roles.UniversityAdmin)]
         public ActionResult<IEnumerable<UniversityAmount>> GetUniversityAmount()
         {
             try
