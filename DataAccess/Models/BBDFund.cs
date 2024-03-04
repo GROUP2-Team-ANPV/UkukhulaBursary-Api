@@ -9,7 +9,7 @@ namespace DataAccess.Models
 {
     public class BBDFund
     {
-        public int ID {get;set;}
+        public int ID { get; set; }
         [Required(ErrorMessage = "Number of funded universities is required.")]
         [Range(0, int.MaxValue, ErrorMessage = "Number of funded universities must be a non-negative value.")]
         public int FundedUniversities { get; set; }
@@ -23,7 +23,7 @@ namespace DataAccess.Models
 
         [Required(ErrorMessage = "Amount used is required.")]
         [Range(0, double.MaxValue, ErrorMessage = "Amount used must be a non-negative value.")]
-        public decimal AmountUsed { get; set; }
+        public decimal RemainingBudget { get; set; }
     }
 
 }
