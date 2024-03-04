@@ -1,4 +1,4 @@
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -284,7 +284,6 @@ namespace DataAccess
             }
         }
 
-                decimal equalAmount = budget / totalUniversities;
 
         public void AllocateUniversityFunds(AllocateFunds dataAccessModel)
         {
