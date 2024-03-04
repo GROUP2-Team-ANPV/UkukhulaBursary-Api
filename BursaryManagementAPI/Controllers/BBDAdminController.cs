@@ -171,14 +171,9 @@ namespace BursaryManagementAPI.Controllers
         }
 
 
-        [HttpPut("UpdateUniversityFunds")]
+        [HttpPost("UniversityAllocation")]
         public ActionResult AllocateFunds()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 _BBDAdminBLL.AllocateFunds();
@@ -186,10 +181,9 @@ namespace BursaryManagementAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating status: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error allocating funds: {ex.Message}");
             }
         }
-
 
 
         [HttpPost("AllocateUniversityFund")]

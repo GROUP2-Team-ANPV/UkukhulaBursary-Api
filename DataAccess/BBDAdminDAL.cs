@@ -351,19 +351,20 @@ namespace DataAccess
             {
                 _connection.Open();
 
-
                 using (SqlCommand command = new SqlCommand("DistributeFundsEqually", _connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    _connection.Open();
                     command.ExecuteNonQuery();
                 }
             }
-
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred: " + ex.Message);
+                throw new Exception("An error occurred: " + ex.Message);
+            }
+            finally
+            {
+                _connection.Close(); // Ensure to close the connection in a finally block to handle exceptions.
             }
         }
 
