@@ -172,7 +172,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPut("UpdateUniversityFunds")]
-        public ActionResult AllocateFunds([FromBody] UniversityFundAllocation allocation)
+        public ActionResult AllocateFunds()
         {
             if (!ModelState.IsValid)
             {
@@ -181,7 +181,7 @@ namespace BursaryManagementAPI.Controllers
 
             try
             {
-                _BBDAdminBLL.AllocateFunds(allocation);
+                _BBDAdminBLL.AllocateFunds();
                 return Ok("Funds allocated successfully!");
             }
             catch (Exception ex)
