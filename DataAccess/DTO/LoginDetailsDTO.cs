@@ -19,6 +19,7 @@ namespace DataAccess.DTO
 
         [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [RegularExpression(@"^[a-zA-Z0-9._-]+@[a-zA-Z.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Invalid Email.")]
         public string Email { get; set; }   
 
         [Required(ErrorMessage = "Role type is required.")]

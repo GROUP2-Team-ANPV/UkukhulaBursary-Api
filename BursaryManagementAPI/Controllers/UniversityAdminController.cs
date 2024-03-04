@@ -98,7 +98,7 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _UniversityAdminBLL.Create(newRequest);
-                return Ok("Student fund request created successfully!");
+                return Ok(new { message = "Student fund request created successfully!", status = "success" });
             }
             catch (Exception)
             {
@@ -145,7 +145,7 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 _UniversityAdminBLL.UpdateFundRequest(FundRequestID, updatedRequest);
-                return Ok("Student fund request updated successfully!");
+                return Ok(new { message = "Student fund request successfully!", status = "success" });
             }
             catch (KeyNotFoundException)
             {
