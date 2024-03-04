@@ -24,6 +24,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllStudents")]
+        [Authorize]
         public ActionResult<IEnumerable<GetAllStudents>> GetAllStudents()
         {
             try
@@ -37,6 +38,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpGet("GetStudentsByUniversityID")]
+        [Authorize]
         public ActionResult<IEnumerable<GetAllStudents>> GetAllStudents(int universityID)
         {
             try
@@ -50,6 +52,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpGet("GetUniversityAndTheirStudents")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<UniversityDTO> GetUniversityAndTheirStudents(int universityID)
         {
             try
@@ -64,6 +67,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetStudentByID")]
+        [Authorize]
         public ActionResult<IEnumerable<GetAllStudents>> GetStudentsByID(int studentID)
         {
             try
@@ -87,6 +91,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPost("StudentFundRequest")]
+        [Authorize(Roles = Roles.UniversityAdmin)]
         public ActionResult Create([FromBody] StudentFundRequest newRequest)
         {
             if (!ModelState.IsValid)
@@ -107,6 +112,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllFundRequests")]
+        [Authorize]
         public ActionResult<IEnumerable<FundRequest>> GetAllFundRequests()
         {
             try
@@ -120,6 +126,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpGet("GetFundRequestByID")]
+        [Authorize]
         public ActionResult<IEnumerable<FundRequest>> GetFundRequestByID(int FundID)
         {
             try
@@ -135,6 +142,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPut("UpdateFundRequest/{FundRequestID}")]
+        [Authorize]
         public ActionResult UpdateFundRequest(int FundRequestID, [FromBody] UpdateFundRequest updatedRequest)
         {
             if (!ModelState.IsValid)
@@ -158,6 +166,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetDocumentByFundRequestID")]
+        [Authorize]
         public ActionResult<IEnumerable<GetDocument>> GetDocumentByFundRequestID(int FundID)
         {
             try
@@ -172,6 +181,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUniversityAmount")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<UniversityAmount>> GetUniversityAmount()
         {
             try
@@ -187,6 +197,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpDelete("DeleteFundRequest/{FundRequestID}")]
+        [Authorize(Roles = Roles.UniversityAdmin)]
         public ActionResult DeleteFundRequest(int FundRequestID)
         {
             try
