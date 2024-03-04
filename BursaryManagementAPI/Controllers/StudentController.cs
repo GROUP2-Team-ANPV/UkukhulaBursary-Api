@@ -3,6 +3,7 @@ using BusinessLogic;
 using System;
 using System.Threading.Tasks;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BursaryManagementAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpPost("{requestID}/UploadDocument")]
+        [Authorize(Roles = Roles.Student)]
         public async Task<ActionResult> UploadDocument(int requestID, [FromForm] UploadDocument uploadDocument)
         {
             try

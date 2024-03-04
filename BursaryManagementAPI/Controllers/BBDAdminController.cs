@@ -23,7 +23,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllUniversities")]
-        // [Authorize(Roles = Roles.Student)]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<GetAllUniversities>> GetAllRequests()
         {
             try
@@ -40,6 +40,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPost("AddUniversity")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult Create([FromBody] AddUniversityAndUser newRequest)
         {
             if (!ModelState.IsValid)
@@ -60,6 +61,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpPost("AddUniversityUser")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult AddUniversityUser([FromBody] AddUniversityUser newRequest)
         {
             if (!ModelState.IsValid)
@@ -80,6 +82,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUniversityUsers")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<GetUsers>> GetUniversityUsers()
         {
             try
@@ -94,6 +97,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUserByUniversityID")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<GetUsers>> GetUserByUniversityID(int UniversityID)
         {
             try
@@ -109,6 +113,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPost("{applicationId}/approve")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult ApproveApplication(int applicationId)
         {
             try
@@ -125,6 +130,7 @@ namespace BursaryManagementAPI.Controllers
 
         
         [HttpPost("{applicationId}/reject")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult RejectApplication(int applicationId, string comment)
         {
             try
@@ -140,6 +146,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpGet("GetAllBBDFunds")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<BBDFund>> BBDFund()
         {
             try
@@ -154,6 +161,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpPut("{applicationId}/UpdateStatus")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult UpdateStatus(int applicationId, [FromBody] DataAccess.Models.UpdateStatus updateStatus)
         {
             if (!ModelState.IsValid)
@@ -173,9 +181,15 @@ namespace BursaryManagementAPI.Controllers
         }
 
 
-        [HttpPost("UniversityAllocation")]
+        [HttpPut("UpdateUniversityFunds")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult AllocateFunds()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 _BBDAdminBLL.AllocateFunds();
@@ -183,12 +197,14 @@ namespace BursaryManagementAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error allocating funds: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error updating status: {ex.Message}");
             }
         }
 
 
+
         [HttpPost("AllocateUniversityFund")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult AllocateUniversityFund([FromBody] AllocateFunds newRequest)
         {
             if (!ModelState.IsValid)
