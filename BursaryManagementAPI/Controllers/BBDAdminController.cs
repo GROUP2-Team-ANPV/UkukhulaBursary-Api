@@ -51,7 +51,8 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _BBDAdminBLL.AddUniversity(newRequest);
-                return Ok("SUniversity created successfully!");
+                
+                return Ok(new { message = "University created successfully!", status = "success" });
             }
             catch (Exception ex)
             {
@@ -113,7 +114,8 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 _BBDAdminBLL.ApproveApplication(applicationId);
-                return Ok("Application approved successfully!");
+                 return Ok(new { message = "application approved successfully!", status = "success" });
+                
             }
             catch (Exception ex)
             {
@@ -121,14 +123,14 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = Roles.BBDAdmin)]
+        
         [HttpPost("{applicationId}/reject")]
         public ActionResult RejectApplication(int applicationId, string comment)
         {
             try
             {
                 _BBDAdminBLL.RejectApplication(applicationId, comment);
-                return Ok("Application rejected successfully!");
+                return Ok(new { message = "Application rejected successfully", status = "success" });
             }
             catch (Exception ex)
             {
@@ -162,7 +164,7 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 _BBDAdminBLL.UpdateStatus(applicationId, updateStatus.status, updateStatus.comment);
-                return Ok("Status updated successfully!");
+                return Ok(new { message = "status updated successfully!", status = "success" });
             }
             catch (Exception ex)
             {
@@ -182,7 +184,7 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 _BBDAdminBLL.AllocateFunds();
-                return Ok("Funds allocated successfully!");
+                return Ok(new { message = "Fund allocated successfully!", status = "success" });
             }
             catch (Exception ex)
             {
