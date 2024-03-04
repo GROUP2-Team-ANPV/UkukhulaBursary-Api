@@ -114,7 +114,7 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 _BBDAdminBLL.ApproveApplication(applicationId);
-                 return Ok(new { message = "University approved successfully!", status = "success" });
+                 return Ok(new { message = "application approved successfully!", status = "success" });
                 
             }
             catch (Exception ex)
