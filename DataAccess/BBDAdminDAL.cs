@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+using DataAccess.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -282,70 +282,7 @@ namespace DataAccess
             }
         }
 
-
-
-        public void AllocateFunds()
-        {
-            try
-            {
-                _connection.Open();
-
-
-                string countQuery = "SELECT COUNT(*) FROM dbo.University";
-                int totalUniversities;
-                using (SqlCommand countCommand = new SqlCommand(countQuery, _connection))
-                {
-                    totalUniversities = (int)countCommand.ExecuteScalar();
-                }
-
-
-                string budgetQuery = "SELECT Budget FROM dbo.BBDAllocation WHERE Year= 2024";
-                decimal budget;
-                using (SqlCommand budgetCommand = new SqlCommand(budgetQuery, _connection))
-                {
-                    budget = (decimal)budgetCommand.ExecuteScalar();
-                }
-
-
                 decimal equalAmount = budget / totalUniversities;
-
-
-                string insertOrUpdateQuery = @"
-                    UPDATE UFA
-                    SET Budget = @EqualAmount
-                    FROM dbo.UniversityFundAllocation UFA
-                    INNER JOIN dbo.University U ON UFA.UniversityID = U.ID
-                    WHERE UFA.UniversityID = @UniversityID;";
-
-                using (SqlCommand command = new SqlCommand(insertOrUpdateQuery, _connection))
-                {
-                    command.Parameters.AddWithValue("@EqualAmount", equalAmount);
-
-
-                    SqlParameter universityIdParameter = command.Parameters.AddWithValue("@UniversityID", SqlDbType.Int);
-
-                    for (int universityID = 1; universityID <= totalUniversities; universityID++)
-                    {
-
-                        universityIdParameter.Value = universityID;
-                        command.ExecuteNonQuery();
-                    }
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error allocating funds: {ex.Message}");
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
-
-
-
 
         public void AllocateUniversityFunds(AllocateFunds dataAccessModel)
         {

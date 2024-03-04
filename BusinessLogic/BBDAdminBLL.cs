@@ -156,21 +156,21 @@ namespace BusinessLogic
             }
         }
 
-        public void AllocateFunds(UniversityFundAllocation allocation)
+        public void AllocateFunds()
         {
             try
             {
 
-                decimal remainingAmount = _repository.GetBBDRemainingAmount(allocation.BBDAllocationID);
+                // decimal remainingAmount = _repository.GetBBDRemainingAmount(allocation.BBDAllocationID);
                 
                 
-                if (allocation.Budget > remainingAmount)
-                {
-                    throw new Exception("Allocated amount exceeds the remaining amount in BBDAllocation.");
+                // if (allocation.Budget > remainingAmount)
+                // {
+                    // throw new Exception("Allocated amount exceeds the remaining amount in BBDAllocation.");
                     
-                }else{
+                // }else{
                      _repository.AllocateFunds();
-                }
+                // }
 
                
             }
