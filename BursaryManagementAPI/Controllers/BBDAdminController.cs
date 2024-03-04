@@ -61,7 +61,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpPost("AddUniversityUser")]
-        [Authorize(Roles = Roles.BBDAdmin)]
+        [Authorize]
         public ActionResult AddUniversityUser([FromBody] AddUniversityUser newRequest)
         {
             if (!ModelState.IsValid)
@@ -97,7 +97,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUserByUniversityID")]
-        [Authorize(Roles = Roles.BBDAdmin)]
+        [Authorize(Roles = Roles.UniversityAdmin)]
         public ActionResult<IEnumerable<GetUsers>> GetUserByUniversityID(int UniversityID)
         {
             try
