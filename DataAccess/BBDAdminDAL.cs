@@ -1,4 +1,4 @@
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -43,6 +43,7 @@ namespace DataAccess
                 }
                 _connection.Close();
                 return requests;
+
             }
             finally
             {
@@ -76,6 +77,7 @@ namespace DataAccess
                 }
             }
             catch (Exception ex)
+
             {
                 Console.WriteLine($"Error executing AddUniversityAndUser: {ex.Message}");
             }
@@ -282,7 +284,6 @@ namespace DataAccess
             }
         }
 
-                decimal equalAmount = budget / totalUniversities;
 
         public void AllocateUniversityFunds(AllocateFunds dataAccessModel)
         {
