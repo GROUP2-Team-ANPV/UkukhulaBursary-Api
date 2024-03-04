@@ -27,7 +27,7 @@ namespace BusinessLogic
             }
         }
 
-      
+
 
         public void AddUniversity(AddUniversityAndUser newRequest)
         {
@@ -36,7 +36,7 @@ namespace BusinessLogic
                 {
                     AddUniversityAndUser dataAccessModel = new()
                     {
-                        
+
                         UniversityName = newRequest.UniversityName,
                         ProvinceID = newRequest.ProvinceID,
                         FirstName = newRequest.FirstName,
@@ -148,7 +148,7 @@ namespace BusinessLogic
             try
             {
 
-                _repository.UpdateApplicationStatus(applicationId, status,comment);
+                _repository.UpdateApplicationStatus(applicationId, status, comment);
             }
             catch (Exception ex)
             {
@@ -162,17 +162,17 @@ namespace BusinessLogic
             {
 
                 // decimal remainingAmount = _repository.GetBBDRemainingAmount(allocation.BBDAllocationID);
-                
-                
+
+
                 // if (allocation.Budget > remainingAmount)
                 // {
-                    // throw new Exception("Allocated amount exceeds the remaining amount in BBDAllocation.");
-                    
+                // throw new Exception("Allocated amount exceeds the remaining amount in BBDAllocation.");
+
                 // }else{
-                     _repository.AllocateFunds();
+                _repository.AllocateFunds();
                 // }
 
-               
+
             }
             catch (Exception ex)
             {
@@ -208,7 +208,7 @@ namespace BusinessLogic
                 }
             else
                 throw new ArgumentNullException(nameof(newRequest));
-            
+
         }
     }
 }
