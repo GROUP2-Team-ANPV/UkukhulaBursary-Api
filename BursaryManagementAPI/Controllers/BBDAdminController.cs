@@ -23,7 +23,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllUniversities")]
-       // [Authorize(Roles = Roles.Student)]
+        // [Authorize(Roles = Roles.Student)]
         public ActionResult<IEnumerable<GetAllUniversities>> GetAllRequests()
         {
             try
@@ -51,11 +51,11 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _BBDAdminBLL.AddUniversity(newRequest);
-                return Ok("Student fund request created successfully!");
+                return Ok("SUniversity created successfully!");
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating student fund request: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $" Error adding University: {ex.Message}");
             }
         }
         [HttpPost("AddUniversityUser")]
@@ -106,7 +106,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-       
+
         [HttpPost("{applicationId}/approve")]
         public ActionResult ApproveApplication(int applicationId)
         {
@@ -151,7 +151,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-         [HttpPut("{applicationId}/UpdateStatus")]
+        [HttpPut("{applicationId}/UpdateStatus")]
         public ActionResult UpdateStatus(int applicationId, [FromBody] DataAccess.Models.UpdateStatus updateStatus)
         {
             if (!ModelState.IsValid)
@@ -161,7 +161,7 @@ namespace BursaryManagementAPI.Controllers
 
             try
             {
-                _BBDAdminBLL.UpdateStatus(applicationId, updateStatus.status,updateStatus.comment);
+                _BBDAdminBLL.UpdateStatus(applicationId, updateStatus.status, updateStatus.comment);
                 return Ok("Status updated successfully!");
             }
             catch (Exception ex)
