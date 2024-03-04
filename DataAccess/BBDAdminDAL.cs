@@ -6,27 +6,27 @@ using System.Data;
 
 namespace DataAccess
 {
-        public class BBDAdminDAL
+    public class BBDAdminDAL
+    {
+        private readonly SqlConnection _connection;
+
+        public BBDAdminDAL(SqlConnection connection)
         {
-            private readonly SqlConnection _connection;
+            _connection = connection;
+        }
 
-            public BBDAdminDAL(SqlConnection connection)
+        public IEnumerable<GetAllUniversities> GetAllRequests()
+        {
+            try
             {
-                _connection = connection;
-            }
-
-            public IEnumerable<GetAllUniversities> GetAllRequests()
-            {
-                try
+                _connection.Open();
+                List<GetAllUniversities> requests = new List<GetAllUniversities>();
+                string query = "EXEC [dbo].[GetAllUniversities]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    _connection.Open();
-                    List<GetAllUniversities> requests = new List<GetAllUniversities>();
-                    string query = "EXEC [dbo].[GetAllUniversities]";
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
                         GetAllUniversities request = new GetAllUniversities
                         {
                             ID = reader.GetInt32(reader.GetOrdinal("ID")),
@@ -37,133 +37,168 @@ namespace DataAccess
                             ContactPerson = reader.GetString(reader.GetOrdinal("ContactPerson")),
                             Email = reader.GetString(reader.GetOrdinal("Email")),
                             PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
-                            };
-                            requests.Add(request);
-                        }
+                        };
+                        requests.Add(request);
                     }
-                    _connection.Close();
-                    return requests;
                 }
-                finally
+                _connection.Close();
+                return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+
+
+
+        public void AddUniversity(AddUniversityAndUser newRequest)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "EXEC [dbo].[AddUniversityAndUser] @UniversityName, @ProvinceID, @FirstName, @LastName, @Email, @PhoneNumber, @RoleID, @DepartmentID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
                 {
-                    _connection.Close();
+                    command.Parameters.AddWithValue("@UniversityName", newRequest.UniversityName);
+                    command.Parameters.AddWithValue("@ProvinceID", newRequest.ProvinceID);
+                    command.Parameters.AddWithValue("@FirstName", newRequest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", newRequest.LastName);
+                    command.Parameters.AddWithValue("@Email", newRequest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
+                    command.Parameters.AddWithValue("@RoleID", 2);
+                    command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
+
+                    command.ExecuteNonQuery();
                 }
             }
-
-
-
-
-            public void AddUniversity(AddUniversityAndUser newRequest)
+            catch (Exception ex)
             {
-                try
-                {
-                    _connection.Open();
-
-                    string query = "EXEC [dbo].[AddUniversityAndUser] @UniversityName, @ProvinceID, @FirstName, @LastName, @Email, @PhoneNumber, @RoleID, @DepartmentID";
-
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    {
-                        command.Parameters.AddWithValue("@UniversityName", newRequest.UniversityName);
-                        command.Parameters.AddWithValue("@ProvinceID", newRequest.ProvinceID);
-                        command.Parameters.AddWithValue("@FirstName", newRequest.FirstName);
-                        command.Parameters.AddWithValue("@LastName", newRequest.LastName);
-                        command.Parameters.AddWithValue("@Email", newRequest.Email);
-                        command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
-                        command.Parameters.AddWithValue("@RoleID", 2);
-                        command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error executing AddUniversityAndUser: {ex.Message}");
-                }
-                finally
-                {
-                    _connection.Close();
-                }
+                Console.WriteLine($"Error executing AddUniversityAndUser: {ex.Message}");
             }
-            public void UpdateApplicationStatus(int applicationId, int status, string comment)
+            finally
             {
-                try
+                _connection.Close();
+            }
+        }
+        public void UpdateApplicationStatus(int applicationId, int status, string comment)
+        {
+            try
+            {
+                _connection.Open();
+
+                if (status == 2 && string.IsNullOrWhiteSpace(comment))
                 {
-                    _connection.Open();
+                    throw new ArgumentException("A comment is required when changing the status to 2.");
+                }
 
-                    if (status == 2 && string.IsNullOrWhiteSpace(comment))
-                    {
-                        throw new ArgumentException("A comment is required when changing the status to 2.");
-                    }
+                string query;
 
-                    string query;
+                if (!string.IsNullOrWhiteSpace(comment))
+                {
+                    query = "UPDATE StudentFundRequest SET StatusID = @Status, Comment = @Comment WHERE ID = @ID";
+                }
+                else
+                {
+                    query = "UPDATE StudentFundRequest SET StatusID = @Status WHERE ID = @ID";
+                }
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@ID", applicationId);
 
                     if (!string.IsNullOrWhiteSpace(comment))
                     {
-                        query = "UPDATE StudentFundRequest SET StatusID = @Status, Comment = @Comment WHERE ID = @ID";
-                    }
-                    else
-                    {
-                        query = "UPDATE StudentFundRequest SET StatusID = @Status WHERE ID = @ID";
+                        command.Parameters.AddWithValue("@Comment", comment);
                     }
 
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    {
-                        command.Parameters.AddWithValue("@Status", status);
-                        command.Parameters.AddWithValue("@ID", applicationId);
+                    command.ExecuteNonQuery();
+                    _connection.Close();
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
 
-                        if (!string.IsNullOrWhiteSpace(comment))
+        public void AddUniversityUser(AddUniversityUser newRequest)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "EXEC [dbo].[AddUniversityUser] @UniversityID, @FirstName, @LastName, @Email, @PhoneNumber, @DepartmentID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@UniversityID", newRequest.UniversityID);
+                    command.Parameters.AddWithValue("@FirstName", newRequest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", newRequest.LastName);
+                    command.Parameters.AddWithValue("@Email", newRequest.Email);
+                    command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
+                    command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error executing AddUniversityUser: {ex.Message}");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public IEnumerable<GetUsers> GetUniversityUsers()
+        {
+            try
+            {
+                _connection.Open();
+                List<GetUsers> requests = new List<GetUsers>();
+                string query = "EXEC [dbo].[GetUniversityUser]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        GetUsers request = new()
                         {
-                            command.Parameters.AddWithValue("@Comment", comment);
-                        }
-
-                        command.ExecuteNonQuery();
-                        _connection.Close();
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                            UniversityName = reader.GetString(reader.GetOrdinal("UniversityName")),
+                            DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
+                        };
+                        requests.Add(request);
                     }
                 }
-                finally
-                {
-                    _connection.Close();
-                }
+                _connection.Close();
+                return requests;
             }
-
-            public void AddUniversityUser(AddUniversityUser newRequest)
+            finally
             {
-                try
-                {
-                    _connection.Open();
-
-                    string query = "EXEC [dbo].[AddUniversityUser] @UniversityID, @FirstName, @LastName, @Email, @PhoneNumber, @DepartmentID";
-
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    {
-                        command.Parameters.AddWithValue("@UniversityID", newRequest.UniversityID);
-                        command.Parameters.AddWithValue("@FirstName", newRequest.FirstName);
-                        command.Parameters.AddWithValue("@LastName", newRequest.LastName);
-                        command.Parameters.AddWithValue("@Email", newRequest.Email);
-                        command.Parameters.AddWithValue("@PhoneNumber", newRequest.PhoneNumber);
-                        command.Parameters.AddWithValue("@DepartmentID", newRequest.DepartmentID);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error executing AddUniversityUser: {ex.Message}");
-                }
-                finally
-                {
-                    _connection.Close();
-                }
+                _connection.Close();
             }
+        }
 
-            public IEnumerable<GetUsers> GetUniversityUsers()
+        public IEnumerable<GetUsers> GetUserByUniversityID(int UniversityID)
+        {
+            try
             {
-                try
+                _connection.Open();
+                List<GetUsers> requests = new List<GetUsers>();
+                string query = "EXEC [dbo].[GetUserByUniversityID] @UniversityID";
+                using (SqlCommand command = new SqlCommand(query, _connection))
                 {
-                    _connection.Open();
-                    List<GetUsers> requests = new List<GetUsers>();
-                    string query = "EXEC [dbo].[GetUniversityUser]";
-                    using (SqlCommand command = new SqlCommand(query, _connection))
+                    command.Parameters.AddWithValue("@UniversityID", UniversityID);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -183,191 +218,157 @@ namespace DataAccess
                     _connection.Close();
                     return requests;
                 }
-                finally
-                {
-                    _connection.Close();
-                }
-            }
 
-            public IEnumerable<GetUsers> GetUserByUniversityID(int UniversityID)
+            }
+            finally
             {
-                try
-                {
-                    _connection.Open();
-                    List<GetUsers> requests = new List<GetUsers>();
-                    string query = "EXEC [dbo].[GetUserByUniversityID] @UniversityID";
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    {
-                        command.Parameters.AddWithValue("@UniversityID", UniversityID);
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                GetUsers request = new()
-                                {
-                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                                    Email = reader.GetString(reader.GetOrdinal("Email")),
-                                    PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
-                                    UniversityName = reader.GetString(reader.GetOrdinal("UniversityName")),
-                                    DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
-                                };
-                                requests.Add(request);
-                            }
-                        }
-                        _connection.Close();
-                        return requests;
-                    }
-
-                }
-                finally
-                {
-                    _connection.Close();
-                }
+                _connection.Close();
             }
-            public IEnumerable<BBDFund> BBDFund()
-
-            {
-                try
-                {
-                    _connection.Open();
-                    List<BBDFund> requests = new List<BBDFund>();
-                    string query = "SELECT ID, Budget, AmountUsed, FundedUniversities, Year FROM [dbo].[uspGetBBDFundsDetails]";
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            BBDFund request = new()
-                            {
-                                ID = reader.GetInt32(reader.GetOrdinal("ID")),
-                                Year = reader.GetInt32(reader.GetOrdinal("Year")),
-                                Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
-                                AmountUsed = reader.GetDecimal(reader.GetOrdinal("AmountUsed")),
-                                FundedUniversities = reader.GetInt32(reader.GetOrdinal("FundedUniversities"))
-                            };
-                            requests.Add(request);
-                        }
-                    }
-                    _connection.Close();
-                    return requests;
-                }
-                finally
-                {
-                    _connection.Close();
-                }
-            }
-
-
-            public void UpdateApplicationStatus(int applicationId, string status ,string comment)
-            {
-                try
-                {
-                    _connection.Open();
-
-                    string query = "UPDATE StudentFundRequest SET StatusID = @Status, Comment = @Comment WHERE ID = @ID";
-
-                    using (SqlCommand command = new SqlCommand(query, _connection))
-                    {
-                        command.Parameters.AddWithValue("@Status", status);
-                        command.Parameters.AddWithValue("@Comment", comment);
-                        command.Parameters.AddWithValue("@ID", applicationId);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-                finally
-                {
-                    _connection.Close();
-                }
-            }
-
-            
-
-            // public void AllocateFunds()
-            // {
-            //     try
-            //     {
-            //         _connection.Open();
-
-                    
-            //         string countQuery = "SELECT COUNT(*) FROM dbo.University";
-            //         int totalUniversities;
-            //         using (SqlCommand countCommand = new SqlCommand(countQuery, _connection))
-            //         {
-            //             totalUniversities = (int)countCommand.ExecuteScalar();
-            //         }
-
-                    
-            //         string budgetQuery = "SELECT Budget FROM dbo.BBDAllocation WHERE Year= 2024";
-            //         decimal budget;
-            //         using (SqlCommand budgetCommand = new SqlCommand(budgetQuery, _connection))
-            //         {
-            //             budget = (decimal)budgetCommand.ExecuteScalar();
-            //         }
-
-                    
-            //         decimal equalAmount = budget / totalUniversities;
-
-
-            //         string insertOrUpdateQuery = @"
-            //         UPDATE UFA
-            //         SET Budget = @EqualAmount
-            //         FROM dbo.UniversityFundAllocation UFA
-            //         INNER JOIN dbo.University U ON UFA.UniversityID = U.ID
-            //         WHERE UFA.UniversityID = @UniversityID;";
-                    
-            //         using (SqlCommand command = new SqlCommand(insertOrUpdateQuery, _connection))
-            //         {
-            //             command.Parameters.AddWithValue("@EqualAmount", equalAmount);
-
-
-            //                     SqlParameter universityIdParameter = command.Parameters.AddWithValue("@UniversityID", SqlDbType.Int);
-                                
-            //                     for (int universityID = 1; universityID <= totalUniversities; universityID++)
-            //                     {
-                                    
-            //                         universityIdParameter.Value = universityID;
-            //                         command.ExecuteNonQuery();
-            //                     }
-
-    
-            //         }
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         Console.WriteLine($"Error allocating funds: {ex.Message}");
-            //     }
-            //     finally
-            //     {
-            //         _connection.Close();
-            //     }
-            // }
-
-            public void AllocateFunds(){
-
-                try
-                {
-                    _connection.Open();
-                    
-               
-                    using (SqlCommand command = new SqlCommand("DistributeFundsEqually", _connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        _connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                }
-            
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("An error occurred: " + ex.Message);
-                    }
         }
-            
+        public IEnumerable<BBDFund> BBDFund()
 
-        
+        {
+            try
+            {
+                _connection.Open();
+                List<BBDFund> requests = new List<BBDFund>();
+                string query = "SELECT ID, Budget, RemainingBudget, FundedUniversities, Year FROM [dbo].[vGetBBDFundsDetails]";
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        BBDFund request = new()
+                        {
+                            ID = reader.GetInt32(reader.GetOrdinal("ID")),
+                            Year = reader.GetInt32(reader.GetOrdinal("Year")),
+                            Budget = reader.GetDecimal(reader.GetOrdinal("Budget")),
+                            RemainingBudget = reader.GetDecimal(reader.GetOrdinal("RemainingBudget")),
+                            FundedUniversities = reader.GetInt32(reader.GetOrdinal("FundedUniversities"))
+                        };
+                        requests.Add(request);
+                    }
+                }
+                _connection.Close();
+                return requests;
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+
+        public void UpdateApplicationStatus(int applicationId, string status, string comment)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "UPDATE StudentFundRequest SET StatusID = @Status, Comment = @Comment WHERE ID = @ID";
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@Comment", comment);
+                    command.Parameters.AddWithValue("@ID", applicationId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+
+
+        // public void AllocateFunds()
+        // {
+        //     try
+        //     {
+        //         _connection.Open();
+
+
+        //         string countQuery = "SELECT COUNT(*) FROM dbo.University";
+        //         int totalUniversities;
+        //         using (SqlCommand countCommand = new SqlCommand(countQuery, _connection))
+        //         {
+        //             totalUniversities = (int)countCommand.ExecuteScalar();
+        //         }
+
+
+        //         string budgetQuery = "SELECT Budget FROM dbo.BBDAllocation WHERE Year= 2024";
+        //         decimal budget;
+        //         using (SqlCommand budgetCommand = new SqlCommand(budgetQuery, _connection))
+        //         {
+        //             budget = (decimal)budgetCommand.ExecuteScalar();
+        //         }
+
+
+        //         decimal equalAmount = budget / totalUniversities;
+
+
+        //         string insertOrUpdateQuery = @"
+        //         UPDATE UFA
+        //         SET Budget = @EqualAmount
+        //         FROM dbo.UniversityFundAllocation UFA
+        //         INNER JOIN dbo.University U ON UFA.UniversityID = U.ID
+        //         WHERE UFA.UniversityID = @UniversityID;";
+
+        //         using (SqlCommand command = new SqlCommand(insertOrUpdateQuery, _connection))
+        //         {
+        //             command.Parameters.AddWithValue("@EqualAmount", equalAmount);
+
+
+        //                     SqlParameter universityIdParameter = command.Parameters.AddWithValue("@UniversityID", SqlDbType.Int);
+
+        //                     for (int universityID = 1; universityID <= totalUniversities; universityID++)
+        //                     {
+
+        //                         universityIdParameter.Value = universityID;
+        //                         command.ExecuteNonQuery();
+        //                     }
+
+
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine($"Error allocating funds: {ex.Message}");
+        //     }
+        //     finally
+        //     {
+        //         _connection.Close();
+        //     }
+        // }
+
+        public void AllocateFunds()
+        {
+
+            try
+            {
+                _connection.Open();
+
+
+                using (SqlCommand command = new SqlCommand("DistributeFundsEqually", _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    _connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+        }
+
+
+
         public void AllocateUniversityFunds(AllocateFunds dataAccessModel)
         {
             try
@@ -395,18 +396,18 @@ namespace DataAccess
                     command.ExecuteNonQuery();
                 }
 
-                    
-
-                    
-                }
-                finally
-                {
-                    _connection.Close();
-                }
 
 
-            
+
             }
+            finally
+            {
+                _connection.Close();
+            }
+
+
+
+        }
 
 
 
