@@ -9,18 +9,18 @@ using System;
 using System.Collections.Generic;
 
 namespace BursaryManagementAPI.Controllers
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
     public class UniversityAdminController : ControllerBase
     {
         private readonly UniversityAdminBLL _UniversityAdminBLL;
-        
+
 
         public UniversityAdminController(UniversityAdminBLL StudentFundRequestBLL)
         {
             _UniversityAdminBLL = StudentFundRequestBLL;
-            
+
         }
 
         [HttpGet("GetAllStudents")]
@@ -50,7 +50,8 @@ namespace BursaryManagementAPI.Controllers
             }
         }
         [HttpGet("GetUniversityAndTheirStudents")]
-        public ActionResult<UniversityDTO> GetUniversityAndTheirStudents(int universityID) {
+        public ActionResult<UniversityDTO> GetUniversityAndTheirStudents(int universityID)
+        {
             try
             {
                 var university = _UniversityAdminBLL.GetUniversityAndTheirStudents(universityID);
@@ -97,11 +98,11 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _UniversityAdminBLL.Create(newRequest);
-                return Ok(new { message = "Student fund request created successfully!" });
+                return Ok("Student fund request created successfully!");
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error creating student fund request" });
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error creating student fund request");
             }
         }
 
@@ -132,7 +133,7 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-       
+
         [HttpPut("UpdateFundRequest/{FundRequestID}")]
         public ActionResult UpdateFundRequest(int FundRequestID, [FromBody] UpdateFundRequest updatedRequest)
         {
@@ -171,7 +172,8 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUniversityAmount")]
-        public ActionResult<IEnumerable<UniversityAmount>> GetUniversityAmount(){
+        public ActionResult<IEnumerable<UniversityAmount>> GetUniversityAmount()
+        {
             try
             {
                 var requests = _UniversityAdminBLL.GetUniversityAmounts();
@@ -190,7 +192,7 @@ namespace BursaryManagementAPI.Controllers
             try
             {
                 var deleted = _UniversityAdminBLL.DeleteFundRequest(FundRequestID);
-                
+
                 if (deleted)
                 {
                     return Ok("Student fund request deleted successfully!");
@@ -208,7 +210,7 @@ namespace BursaryManagementAPI.Controllers
 
 
 
-        
+
 
     }
 }
