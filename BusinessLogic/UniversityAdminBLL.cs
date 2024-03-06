@@ -6,6 +6,7 @@ using System.Net;
 using Microsoft.AspNetCore.Identity;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using DataAccess.DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessLogic
 {
@@ -159,7 +160,7 @@ namespace BusinessLogic
             }
         }
 
-        public GetDocument GetDocumentByFundRequestID(int FundID)
+        public IEnumerable<GetDocument> GetDocumentByFundRequestID(int FundID)
         {
             try
             {

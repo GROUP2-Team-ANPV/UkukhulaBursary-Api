@@ -1,10 +1,12 @@
 ﻿using DataAccess.DTO;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DataAccess
@@ -459,8 +461,9 @@ namespace DataAccess
 
 
 
-        public GetDocument GetDocumentByFundRequestID(int FundID)
+        public IEnumerable<GetDocument> GetDocumentByFundRequestID(int FundID)
         {
+            List<GetDocument> documents = new List<GetDocument>();
 
             try
             {
@@ -471,28 +474,24 @@ namespace DataAccess
                     command.Parameters.AddWithValue("@FundRequestID", FundID);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        if (reader.Read())
+                        while (reader.Read())
                         {
                             GetDocument document = new GetDocument
                             {
                                 DocumentPath = reader.GetString(reader.GetOrdinal("DocumentPath")),
                                 DocumentType = reader.GetString(reader.GetOrdinal("DocumentType"))
                             };
-
-                            return document;
-                        }
-                        else
-                        {
-                            return null;
+                            documents.Add(document);
                         }
                     }
                 }
-
             }
             finally
             {
                 _connection.Close();
             }
+
+            return documents;
 
         }
 
