@@ -40,7 +40,6 @@ namespace BusinessLogic
             {
                new Claim(ClaimTypes.Name, user.FirstName ),
                new Claim (ClaimTypes.Surname, user.LastName),
-               new Claim (ClaimTypes.Email, user.Email),
                new Claim(ClaimTypes.Role , user.RoleType),
                 (user.UniverisityID != null) ? new Claim(ClaimTypes.GroupSid, user.UniverisityID.ToString()):new Claim(ClaimTypes.GroupSid, "0")
 

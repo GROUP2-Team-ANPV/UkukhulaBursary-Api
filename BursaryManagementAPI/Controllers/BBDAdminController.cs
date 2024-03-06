@@ -23,7 +23,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetAllUniversities")]
-       // [Authorize(Roles = Roles.Student)]
+        [Authorize]
         public ActionResult<IEnumerable<GetAllUniversities>> GetAllRequests()
         {
             try
@@ -40,6 +40,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPost("AddUniversity")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult Create([FromBody] AddUniversityAndUser newRequest)
         {
             if (!ModelState.IsValid)
@@ -51,14 +52,16 @@ namespace BursaryManagementAPI.Controllers
             {
 
                 _BBDAdminBLL.AddUniversity(newRequest);
-                return Ok("Student fund request created successfully!");
+                
+                return Ok(new { message = "University created successfully!", status = "success" });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error creating student fund request: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $" Error adding University: {ex.Message}");
             }
         }
         [HttpPost("AddUniversityUser")]
+        [Authorize]
         public ActionResult AddUniversityUser([FromBody] AddUniversityUser newRequest)
         {
             if (!ModelState.IsValid)
@@ -79,6 +82,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUniversityUsers")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<GetUsers>> GetUniversityUsers()
         {
             try
@@ -93,6 +97,7 @@ namespace BursaryManagementAPI.Controllers
         }
 
         [HttpGet("GetUserByUniversityID")]
+        [Authorize(Roles = Roles.UniversityAdmin)]
         public ActionResult<IEnumerable<GetUsers>> GetUserByUniversityID(int UniversityID)
         {
             try
@@ -106,14 +111,16 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-       
+
         [HttpPost("{applicationId}/approve")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult ApproveApplication(int applicationId)
         {
             try
             {
                 _BBDAdminBLL.ApproveApplication(applicationId);
-                return Ok("Application approved successfully!");
+                 return Ok(new { message = "application approved successfully!", status = "success" });
+                
             }
             catch (Exception ex)
             {
@@ -121,14 +128,15 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = Roles.BBDAdmin)]
+        
         [HttpPost("{applicationId}/reject")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult RejectApplication(int applicationId, string comment)
         {
             try
             {
                 _BBDAdminBLL.RejectApplication(applicationId, comment);
-                return Ok("Application rejected successfully!");
+                return Ok(new { message = "Application rejected successfully", status = "success" });
             }
             catch (Exception ex)
             {
@@ -138,6 +146,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpGet("GetAllBBDFunds")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult<IEnumerable<BBDFund>> BBDFund()
         {
             try
@@ -151,7 +160,8 @@ namespace BursaryManagementAPI.Controllers
             }
         }
 
-         [HttpPut("{applicationId}/UpdateStatus")]
+        [HttpPut("{applicationId}/UpdateStatus")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult UpdateStatus(int applicationId, [FromBody] DataAccess.Models.UpdateStatus updateStatus)
         {
             if (!ModelState.IsValid)
@@ -161,8 +171,8 @@ namespace BursaryManagementAPI.Controllers
 
             try
             {
-                _BBDAdminBLL.UpdateStatus(applicationId, updateStatus.status,updateStatus.comment);
-                return Ok("Status updated successfully!");
+                _BBDAdminBLL.UpdateStatus(applicationId, updateStatus.status, updateStatus.comment);
+                return Ok(new { message = "status updated successfully!", status = "success" });
             }
             catch (Exception ex)
             {
@@ -172,7 +182,8 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPut("UpdateUniversityFunds")]
-        public ActionResult AllocateFunds([FromBody] UniversityFundAllocation allocation)
+        [Authorize(Roles = Roles.BBDAdmin)]
+        public ActionResult AllocateFunds()
         {
             if (!ModelState.IsValid)
             {
@@ -181,8 +192,8 @@ namespace BursaryManagementAPI.Controllers
 
             try
             {
-                _BBDAdminBLL.AllocateFunds(allocation);
-                return Ok("Funds allocated successfully!");
+                _BBDAdminBLL.AllocateFunds();
+                return Ok(new { message = "Fund allocated successfully!", status = "success" });
             }
             catch (Exception ex)
             {
@@ -193,6 +204,7 @@ namespace BursaryManagementAPI.Controllers
 
 
         [HttpPost("AllocateUniversityFund")]
+        [Authorize(Roles = Roles.BBDAdmin)]
         public ActionResult AllocateUniversityFund([FromBody] AllocateFunds newRequest)
         {
             if (!ModelState.IsValid)
